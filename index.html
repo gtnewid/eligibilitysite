@@ -1,70 +1,15 @@
 <!DOCTYPE html>
-<html>
-
-<!-- Add this at the top of <body> -->
-
-<div id="infoSection" style="max-width:470px; margin:40px auto; padding:20px 15px; border:1px solid #ccc; border-radius:10px; background:#f9f9f9;">
-  <h2 style="text-align:center;">Eligibility Calculation Details</h2>
-  <br>
-    <h2 style="text-align:center;">This is <strong>NOT</strong> an official site</h2>
-  <ul style="font-size:16px; margin-bottom:30px;">
-    <li>
-      <strong>Ajmera:</strong>
-      <ul style="margin-left:20px;">
-        <li>Pre-DA rent:
-          <ul style="margin-left:20px;">
-            <li>C wing: <strong>3 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-            <li>D &amp; E wings: <strong>9 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-          </ul>
-        </li>
-        <li>No rent between DA and IOD.</li>
-      </ul>
-    </li>
-    <li style="margin-top:16px;">
-      <strong>Runwal:</strong>
-      <ul style="margin-left:20px;">
-        <li>Pre-DA rent:
-          <ul style="margin-left:20px;">
-            <li>C wing: <strong>6 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-            <li>D &amp; E wings: <strong>9 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-          </ul>
-        </li>
-        <li>
-          Between DA and IOD:
-          <ul style="margin-left:20px;">
-            <li>C, D and E wings: rent for maximum of <strong>8 months</strong> at <strong>Rs 85/sq.ft</strong></li>
-            <li>If A and B have to vacate, they get rent for a maximum of <strong>8 months</strong> or up to IOD, whichever is less, at <strong>Rs 85/sq.ft</strong></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-    <li style="margin-top:16px;">
-      <strong>Dosti:</strong>
-      <ul style="margin-left:20px;">
-        <li>Offering <strong>₹10 Crore 68 Lakhs</strong> to the society, to be divided between all members who have had to vacate.</li>
-        <li>To calculate this split, we can assume what date A &amp; B will vacate – either the IOD date or earlier.</li>
-      </ul>
-    </li>
-  </ul>
-  <div style="font-size:15px; margin:18px 0 0 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
-    <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> and construction cost is assumed to be <strong>₹6,000/sq.ft</strong>.
-    <br>
-    <br>
-    Also, due to rounding off there might be variation for a few hundred rupees in some of the calculations
-  </div>
-  <button id="letsGoBtn" style="margin:30px auto 0 auto; display:block; padding:12px 30px; font-size:17px; background:#3399ff; color:#fff; border:none; border-radius:6px; cursor:pointer;">
-    Got it. Let's go
-  </button>
-</div>
-
+<html lang="en">
 <head>
   <title>Wing and MOFA Area Input with Date Change & Eligibility</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
       max-width: 470px;
       margin: 40px auto;
       padding: 0 15px;
+      background: #fafcff;
     }
     form {
       margin-bottom: 20px;
@@ -156,6 +101,7 @@
       width: 100%;
       max-width: 470px;
       margin: 0 auto 20px auto;
+      font-size: 1em;
     }
     table, th, td {
       border: 1px solid #999;
@@ -167,21 +113,120 @@
     th {
       background-color: #f2f2f2;
     }
-    
     .pastel-blue-row {
-  background-color: #cce5ff;  /* pastel light blue */
-}
-
-	.pastel-green-row {
-  background-color: #BEE5B0; /* pastel green */
-}
-    
+      background-color: #cce5ff;
+    }
+    .pastel-green-row {
+      background-color: #BEE5B0;
+    }
+    /* Mobile responsive styles */
+    @media (max-width: 600px) {
+      body {
+        max-width: 100vw;
+        margin: 0;
+        padding: 8px;
+        font-size: 1em;
+      }
+      #infoSection, #wingSelectionSection, #mofaQuestion, #estimationSection,
+      #unitSelection, #mofaInputSection, #summarySection, #questionSection,
+      #allBasicInputsSection, #eligibilitySection {
+        max-width: 98vw !important;
+        width: 98vw !important;
+        margin: 8px auto !important;
+        padding: 8px 2vw !important;
+      }
+      table {
+        font-size: 0.95em;
+        max-width: 98vw !important;
+        overflow-x: auto;
+        display: block;
+      }
+      th, td {
+        padding: 7px 2px;
+        font-size: 0.95em;
+      }
+      input, select, button {
+        font-size: 1em;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      #dateInputsDiv label {
+        width: 100%;
+        display: block;
+        margin-bottom: 2px;
+      }
+      #dateInputsDiv input[type="date"] {
+        width: 100%;
+      }
+      .back-btn,
+      #nextButton,
+      #submitDatesBtn,
+      #nextButtonFromQuestion,
+      #compareButton,
+      #backToSummaryBtn {
+        width: 100%;
+        margin-bottom: 8px;
+        min-width: 0;
+      }
+    }
   </style>
 </head>
 <body>
+  <div id="infoSection" style="max-width:470px; margin:40px auto; padding:20px 15px; border:1px solid #ccc; border-radius:10px; background:#f9f9f9;">
+    <h2 style="text-align:center;">Eligibility Calculation Details</h2>
+    <br>
+    <h2 style="text-align:center;">This is <strong>NOT</strong> an official site</h2>
+    <ul style="font-size:16px; margin-bottom:30px;">
+      <li>
+        <strong>Ajmera:</strong>
+        <ul style="margin-left:20px;">
+          <li>Pre-DA rent:
+            <ul style="margin-left:20px;">
+              <li>C wing: <strong>3 months</strong> at <strong>Rs 80/sq.ft</strong></li>
+              <li>D &amp; E wings: <strong>9 months</strong> at <strong>Rs 80/sq.ft</strong></li>
+            </ul>
+          </li>
+          <li>No rent between DA and IOD.</li>
+        </ul>
+      </li>
+      <li style="margin-top:16px;">
+        <strong>Runwal:</strong>
+        <ul style="margin-left:20px;">
+          <li>Pre-DA rent:
+            <ul style="margin-left:20px;">
+              <li>C wing: <strong>6 months</strong> at <strong>Rs 80/sq.ft</strong></li>
+              <li>D &amp; E wings: <strong>9 months</strong> at <strong>Rs 80/sq.ft</strong></li>
+            </ul>
+          </li>
+          <li>
+            Between DA and IOD:
+            <ul style="margin-left:20px;">
+              <li>C, D and E wings: rent for maximum of <strong>8 months</strong> at <strong>Rs 85/sq.ft</strong></li>
+              <li>If A and B have to vacate, they get rent for a maximum of <strong>8 months</strong> or up to IOD, whichever is less, at <strong>Rs 85/sq.ft</strong></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li style="margin-top:16px;">
+        <strong>Dosti:</strong>
+        <ul style="margin-left:20px;">
+          <li>Offering <strong>₹10 Crore 68 Lakhs</strong> to the society, to be divided between all members who have had to vacate.</li>
+          <li>To calculate this split, we can assume what date A &amp; B will vacate – either the IOD date or earlier.</li>
+        </ul>
+      </li>
+    </ul>
+    <div style="font-size:15px; margin:18px 0 0 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
+      <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> and construction cost is assumed to be <strong>₹6,000/sq.ft</strong>.
+      <br><br>
+      Also, due to rounding off there might be variation for a few hundred rupees in some of the calculations
+    </div>
+    <button id="letsGoBtn" style="margin:30px auto 0 auto; display:block; padding:12px 30px; font-size:17px; background:#3399ff; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+      Got it. Let's go
+    </button>
+  </div>
 
   <!-- Initial Wing selection -->
-  <div id="wingSelectionSection">
+  <div id="wingSelectionSection" style="display:none;">
     <h2>Select your wing</h2>
     <form id="wingForm">
       <label for="wingSelect">Select your wing:</label><br>
@@ -268,7 +313,6 @@
     <div id="priceEstimateMessage"></div>
   </div>
 
-
   <div id="finalMessage"></div>
 
   <!-- Summary section with Next -->
@@ -290,7 +334,7 @@
     <div id="selectionDisplay"></div>
 
     <!-- Date inputs if yes -->
-    <div id="dateInputsDiv">
+    <div id="dateInputsDiv" style="display:none;">
       <label for="dateDAUpdate">Date of DA:</label>
       <input type="date" id="dateDAUpdate" name="dateDAUpdate" required><br>
 
@@ -1667,6 +1711,7 @@ document.getElementById('hindCHSLaunchRateInfoInline').innerText = `₹${launchP
   showSection(wingSelectionSection);
   dateInputsDiv.style.display = 'none';
   eligibilitySection.style.display = 'none';
+
 
 </script>
 </body>
