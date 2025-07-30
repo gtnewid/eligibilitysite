@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,7 +217,7 @@
       </li>
     </ul>
     <div style="font-size:15px; margin:18px 0 0 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
-      <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> and construction cost is assumed to be <strong>₹6,000/sq.ft</strong>.
+      <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> and construction cost is assumed to be <strong>₹6,000/sq.ft. <br> It could be one of the four possibilities below</strong>.
       <br><br>
       Also, due to rounding off there might be variation for a few hundred rupees in some of the calculations
     </div>
@@ -324,7 +325,7 @@
   <!-- Question section - ask if want to change dates -->
   <div id="questionSection">
     <label for="changeDatesSelect"><strong>Do you want to change DA, IOD or Date A and B vacate?</strong></label><br><br>
-    <label for="changeDatesSelect"><strong>This will impact backdate rent calculation for all wings</strong></label><br>
+    <label for="changeDatesSelect"><strong>This will impact backdate rent calculation for all wings (especially for Dosti)</strong></label><br>
     <select id="changeDatesSelect" name="changeDatesSelect">
       <option value="" disabled selected>Select Yes or No</option>
       <option value="Yes">Yes</option>
@@ -1338,33 +1339,93 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
           <td style="text-align:right;">${(runwalRent + daToIODUser.runwal).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         </tr>
         <tr>
-          <td>12 months rent after IOD (Rs)</td>
-          <td style="text-align:right;">${dosti12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${ajmera12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${runwal12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-        <tr>
-          <td>13 - 24 months rent after IOD (Rs)</td>
-          <td style="text-align:right;">${dosti13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${ajmera13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td>12 Months Rent After IOD (Rs)</td>
+  <td style="text-align:right;">
+    ${dosti12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(dosti12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${ajmera12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(ajmera12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${runwal12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+</tr>        
 
-          <td style="text-align:right;">${runwal13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-        <tr>
-          <td>25 - 36 months rent after IOD (Rs)</td>
-          <td style="text-align:right;">${dosti25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${ajmera25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 
-                    <td style="text-align:right;">${runwal25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-        <tr>
-          <td>37 - 42 months rent after IOD (Rs)</td>
-          <td style="text-align:right;">${dosti37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          
-          <td style="text-align:right;">${ajmera37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${runwal37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td> 
-        </tr>
-        <tr class="pastel-blue-row">
+<tr>
+  <td>13 - 24 Months Rent After IOD (Rs)</td>
+  <td style="text-align:right;">
+    ${dosti13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(dosti13_24MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${ajmera13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(ajmera13_24MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${runwal13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal13_24MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+</tr>
+<tr>
+  <td>25 - 36 Months Rent After IOD (Rs)</td>
+  <td style="text-align:right;">
+    ${dosti25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(dosti25_36MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${ajmera25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(ajmera25_36MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${runwal25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal25_36MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+</tr>
+<tr>
+  <td>37 - 42 Months Rent After IOD (Rs)</td>
+  <td style="text-align:right;">
+    ${dosti37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(dosti37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${ajmera37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(ajmera37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${runwal37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+</tr>
+
+       <tr class="pastel-blue-row">
   <td><strong>Total Rent (Rs)</strong></td>
   <td style="text-align:right;">${totalDostiUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${totalAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
@@ -1447,8 +1508,8 @@ const gst5FullDosti = (launchPrice * proposedAreaDosti) * 0.05;
 const gst5FullAjmera = 0;
 const gst5FullRunwal = 0;
 
-// Row 4: GST at 18% of construction cost
-const gst18ConstructionDosti = (proposedAreaDosti * 6000) * 0.18;
+// Row 4: GST at 5% of construction cost
+const gst18ConstructionDosti = (proposedAreaDosti * 6000) * 0.05;
 const gst18ConstructionAjmera = 0;
 const gst18ConstructionRunwal = 0;
 
@@ -1458,7 +1519,7 @@ const yourLiabilitiesTableHTML = `
 
   <div style="font-size:15px; margin:28px 0 8px 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
   <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> 
-  (<span id="launchRateInfoInline">₹35,000/sq.ft</span>), and construction cost is assumed to be <strong>₹6,000/sq.ft</strong>.
+  (<span id="launchRateInfoInline">₹35,000/sq.ft</span>), and construction cost is assumed to be <strong>₹6,000/sq.ft.</strong> <br> It could be one of the four possibilities below.
 </div>
 
   <table>
@@ -1490,7 +1551,7 @@ const yourLiabilitiesTableHTML = `
         <td style="text-align:right;">0</td>
       </tr>
       <tr>
-        <td>GST at 18% of construction cost</td>
+        <td>GST at 5% of construction cost</td>
         <td style="text-align:right;">${gst18ConstructionDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         <td style="text-align:right;">0</td>
         <td style="text-align:right;">0</td>
@@ -1543,28 +1604,28 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
          
         </tr>
         <tr>
-          <td>12 months rent after IOD (Rs)</td>
+          <td>12 Months rent after IOD (Rs)</td>
           <td style="text-align:right;">${dosti12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${ajmera12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         </tr>
         <tr>
-          <td>13 - 24 months rent after IOD (Rs)</td>
+          <td>13 - 24 Months rent after IOD (Rs)</td>
           <td style="text-align:right;">${dosti13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${ajmera13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         </tr>
         <tr>
-          <td>25 - 36 months rent after IOD (Rs)</td>
+          <td>25 - 36 Months rent after IOD (Rs)</td>
           <td style="text-align:right;">${dosti25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${ajmera25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         </tr>
         <tr>
-          <td>37 - 42 months rent after IOD (Rs)</td>
+          <td>37 - 42 Months rent after IOD (Rs)</td>
 <td style="text-align:right;">${dosti37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${ajmera37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
@@ -1649,7 +1710,7 @@ const hindCHSGST5FullDosti = (launchPrice * hindCHSProposedDosti) * 0.05;
 const hindCHSGST5FullAjmera = 0;
 const hindCHSGST5FullRunwal = 0;
 
-const hindCHSGST18ConstructionDosti = (hindCHSProposedDosti * 6000) * 0.18;
+const hindCHSGST18ConstructionDosti = (hindCHSProposedDosti * 6000) * 0.05;
 const hindCHSGST18ConstructionAjmera = 0;
 const hindCHSGST18ConstructionRunwal = 0;
 
@@ -1689,7 +1750,7 @@ const hindCHSLiabilitiesTableHTML = `
         <td style="text-align:right;">0</td>
       </tr>
       <tr>
-        <td>GST at 18% of construction cost</td>
+        <td>GST at 5% of construction cost</td>
         <td style="text-align:right;">${hindCHSGST18ConstructionDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         <td style="text-align:right;">0</td>
         <td style="text-align:right;">0</td>
