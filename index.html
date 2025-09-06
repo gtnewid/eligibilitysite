@@ -103,6 +103,8 @@
       max-width: 470px;
       margin: 0 auto 20px auto;
       font-size: 1em;
+      overflow-x: auto;
+      display: block;
     }
     table, th, td {
       border: 1px solid #999;
@@ -135,6 +137,7 @@
         width: 98vw !important;
         margin: 8px auto !important;
         padding: 8px 2vw !important;
+        box-sizing: border-box;
       }
       table {
         font-size: 0.95em;
@@ -169,6 +172,26 @@
         margin-bottom: 8px;
         min-width: 0;
       }
+      /* Ensure scroll for wide tables */
+      .table-responsive {
+        overflow-x: auto;
+        display: block;
+        width: 100vw;
+        max-width: 100vw;
+      }
+      /* Fix h2/h3 font-size for mobile */
+      h2, h3 {
+        font-size: 1.2em !important;
+      }
+      ul {
+        font-size: 1em !important;
+      }
+    }
+    /* Extra: wrap tables responsively on all screens */
+    .table-responsive {
+      overflow-x: auto;
+      width: 100%;
+      display: block;
     }
   </style>
 </head>
@@ -179,7 +202,7 @@
 <div style="text-align:center; font-size:2em; color:#b60000; font-weight:bold; margin:18px 0 24px 0; background:#ffeaea; border-radius:8px; padding:12px;">
   This is not an official site.
 </div>
-    <li>The numbers shown here are my understanding of last offer provided by the builders.</li>
+    <li>The numbers shown here are my understanding of last written offer provided by the builders.</li>
     <br>
     <li>Since my understanding of GST is very limited, I have removed any mention of GST impact but here is the summary of GST in the offer:
       <ul style="margin-left:20px;">
@@ -194,7 +217,6 @@
       </ul>
     </li>
     <br>
-
     <li>Dosti and Ajmera are willing to bear up to 3 crore of Collector dues for individual flats should such liabilities arise. Anything above 3 crores will have to be covered by members.</li>
     <li>Runwal has not agreed to cover any individual members Collector dues.</li>
   </ul>
@@ -1674,59 +1696,117 @@ const totalCashRunwalHindCHS = totalRunwalHindCHS + corpusRunwalHindCHS + shifti
 const totalCashAjmeraHindCHS = totalAjmeraHindCHS + corpusAjmeraHindCHS + shiftingAjmeraHindCHS + brokerageAjmeraHindCHS + memberCollectorDues;
 const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingDostiHindCHS + brokerageDostiHindCHS + memberCollectorDues;
 
+    // --- USER: Runwal-B Pre-DA Adjustment ---
+    // Calculate Runwal-B pre-DA rent for user, with 3 months less for D/E wings
+    let runwalBPreDARent = runwalRent;
+    if (selectedWing === 'D' || selectedWing === 'E') {
+      runwalBPreDARent = runwalRent - (RATE_RUNWAL * userFlatCarpetAreaSqFt * 3);
+      if (runwalBPreDARent < 0) runwalBPreDARent = 0;
+    }
+    // For the rest of the periods, use the same values as Runwal (or add separate logic if needed)
+    // Runwal-B DA to IOD and IOD to FCC are same as Runwal
+    let runwalBBackdatedRent;
+    if (selectedWing === 'A' || selectedWing === 'B') {
+      runwalBBackdatedRent = runwalBackdatedRent; // A/B wings: same as Runwal logic
+    } else if (selectedWing === 'D' || selectedWing === 'E') {
+      // For D/E: adjust pre-DA in backdated sum
+      runwalBBackdatedRent = runwalBPreDARent + daToIODUser.runwal + iodToFCCUser.runwal;
+    } else {
+      runwalBBackdatedRent = runwalRent + daToIODUser.runwal + iodToFCCUser.runwal;
+    }
+    // Total Rent for Runwal-B
+    const totalRunwalBUser =
+      runwalBBackdatedRent +
+      runwal12MonthRentUser +
+      runwal13_24MonthRentUser +
+      runwal25_36MonthRentUser +
+      runwal37_42MonthRentUser;
+    // Total Cash Compensation for Runwal-B
+    const totalCashRunwalBUser =
+      totalRunwalBUser + corpusRunwalUser + shiftingRunwalUser + brokerageRunwalUser;
+
+    // --- HIND CHS: Runwal-B Pre-DA Adjustment ---
+    // Loop and adjust pre-DA for D/E wings in Runwal-B
+    let runwalBPreDAHindCHS = 0;
+    for (const wing in wingAreas) {
+      const flatArea = wingAreas[wing].flatMOFA;
+      const preDAMonths = preDAMonthsRunwalPerWing[wing] || 0;
+      let thisPreDA = RATE_RUNWAL * flatArea * preDAMonths;
+      if (wing === 'D' || wing === 'E') {
+        thisPreDA -= RATE_RUNWAL * flatArea * 3;
+        if (thisPreDA < 0) thisPreDA = 0;
+      }
+      runwalBPreDAHindCHS += thisPreDA;
+    }
+    // DA-IOD and IOD-FCC same as normal Runwal
+    let daToIODHindCHS_runwal = daToIODHindCHS.runwalRent;
+    let iodToFCCHindCHS_runwal = iodToFCCHindCHS.runwalRent;
+    // Backdated sum for Runwal-B (use adjusted pre-DA)
+    const backDatedHindCHSRunwalB =
+      runwalBPreDAHindCHS +
+      daToIODHindCHS_runwal +
+      iodToFCCHindCHS_runwal;
+    // Total Rent for Runwal-B Hind CHS
+    const totalRunwalBHindCHS =
+      backDatedHindCHSRunwalB +
+      runwal12MonthRentHindCHS +
+      runwal13_24MonthRentHindCHS +
+      runwal25_36MonthRentHindCHS +
+      runwal37_42MonthRentHindCHS;
+    // Total Cash Compensation for Runwal-B Hind CHS
+    const totalCashRunwalBHindCHS =
+      totalRunwalBHindCHS + corpusRunwalHindCHS + shiftingRunwalHindCHS + brokerageRunwalHindCHS;
 
 
 
   // Build Your Eligibility table HTML
   eligibilityTableContainer.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Dosti</th>
-          <th>Ajmera</th>
-          <th>Runwal</th>
-          <th>Runwal-B</th>
-
-        </tr>
-      </thead>
-      <tbody>
-    	<tr class="pastel-green-row">
-
+ <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Dosti</th>
+            <th>Ajmera</th>
+            <th>Runwal</th>
+            <th>Runwal-B</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr class="pastel-green-row">
           <td><strong>Proposed Area (sq.ft.)</strong></td>
-          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.65).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}      
+          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.65).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
           <td style="text-align:right;">${(totalMOFAUserSqFt * 1.57).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
           <td style="text-align:right;">${(totalMOFAUserSqFt * 1.585).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
           <td style="text-align:right;">${(totalMOFAUserSqFt * 1.625).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
         </tr>
- <tr>
-  <td>Pre-DA Rent Amount (Rs)</td>
-  <td style="text-align:right;">${dostiPreDARent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraPreDARent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-    <td style="text-align:right;">${runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
-<tr>
-  <td>DA to IOD Rent Amount (Rs)</td>
-  <td style="text-align:right;">${dostiDAtoIODRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraDAtoIODRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  </tr>
-<tr>
-  <td>IOD - FCC Rent Amount (Rs)</td>
-  <td style="text-align:right;">${dostiIODtoFCCRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraIODtoFCCRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
-<tr class="pastel-blue-row">
-  <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
-  <td style="text-align:right;">${dostiBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${runwalBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${runwalBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
+        <tr>
+          <td>Pre-DA Rent Amount (Rs)</td>
+          <td style="text-align:right;">${dostiPreDARent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraPreDARent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${runwalRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${runwalBPreDARent.toLocaleString('en-IN')}</td>
+        </tr>
+        <tr>
+          <td>DA to IOD Rent Amount (Rs)</td>
+          <td style="text-align:right;">${dostiDAtoIODRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraDAtoIODRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN')}</td>
+        </tr>
+        <tr>
+          <td>IOD - FCC Rent Amount (Rs)</td>
+          <td style="text-align:right;">${dostiIODtoFCCRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraIODtoFCCRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN')}</td>
+        </tr>
+        <tr class="pastel-blue-row">
+          <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
+          <td style="text-align:right;">${dostiBackdatedRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraBackdatedRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${runwalBackdatedRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${runwalBBackdatedRent.toLocaleString('en-IN')}</td>
+        </tr>
 
 
    <tr>
@@ -1841,13 +1921,13 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
   </td>
 </tr>
 
-       <tr class="pastel-blue-row">
-  <td><strong>Total Rent (Rs)</strong></td>
-  <td style="text-align:right;">${totalDostiUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  </tr>
+        <tr class="pastel-blue-row">
+          <td><strong>Total Rent (Rs)</strong></td>
+          <td style="text-align:right;">${totalDostiUser.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalAjmeraUser.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalRunwalUser.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalRunwalBUser.toLocaleString('en-IN')}</td>
+        </tr>
 
 <tr>
   <td><strong>Corpus (Rs)</strong></td>
@@ -1877,14 +1957,13 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
   </tr>
 
 
-      <tr class="pastel-green-row">
-  <td><strong>Total Cash Compensation (Rs)</strong></td>
-<td style="text-align:right;">${totalCashDostiUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalCashAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  
-  <td style="text-align:right;">${totalCashRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-    <td style="text-align:right;">${totalCashRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  </tr>
+      <<tr class="pastel-green-row">
+          <td><strong>Total Cash Compensation (Rs)</strong></td>
+          <td style="text-align:right;">${totalCashDostiUser.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalCashAjmeraUser.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalCashRunwalUser.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalCashRunwalBUser.toLocaleString('en-IN')}</td>
+        </tr>
 
       <tr class="pastel-blue-row">
 
@@ -1996,55 +2075,52 @@ const gst18ConstructionRunwal = 0;
 
   // Build Hind CHS Eligibility table HTML
   hindCHSEligibilityTableContainer.innerHTML = `
-    <table>
-      <thead>
-        <tr>
-        <th></th>
-        <th>Dosti</th>
-        <th>Ajmera</th>
-        <th>Runwal</th>
-        <th>Runwal-B</th>
-
-        </tr>
-      </thead>
-      <tbody>
-      <tr class="pastel-green-row">
+       <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Dosti</th>
+            <th>Ajmera</th>
+            <th>Runwal</th>
+            <th>Runwal-B</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr class="pastel-green-row">
           <td><strong>Proposed Area (sq.ft.)</strong></td>
           <td style="text-align:right;">${proposedAreaHindCHS.Dosti.toFixed(2)}</td>
           <td style="text-align:right;">${proposedAreaHindCHS.Ajmera.toFixed(2)}</td>
           <td style="text-align:right;">${proposedAreaHindCHS.Runwal.toFixed(2)}</td>
-        <td style="text-align:right;">${proposedAreaHindCHS.RunwalB.toFixed(2)}</td>
+          <td style="text-align:right;">${proposedAreaHindCHS.RunwalB.toFixed(2)}</td>
         </tr>
-<tr>
-  <td>Pre-DA Rent Amount (Rs)</td>
- <td style="text-align:right;">${dostiPreDAHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraPreDAHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  </tr>
-<tr>
-  <td>DA to IOD Rent Amount (Rs)</td>
- <td style="text-align:right;">${dostiDAtoIODHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraDAtoIODHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-<td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
-<tr>
-  <td>IOD - FCC Rent Amount (Rs)</td>
- <td style="text-align:right;">${dostiIODtoFCCHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraIODtoFCCHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  </tr>
-
-
-<tr class="pastel-blue-row">
-  <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
-  <td style="text-align:right;">${dostiBackdatedHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${ajmeraBackdatedHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-<td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
+        <tr>
+          <td>Pre-DA Rent Amount (Rs)</td>
+          <td style="text-align:right;">${dostiPreDAHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraPreDAHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${runwalBPreDAHindCHS.toLocaleString('en-IN')}</td>
+        </tr>
+        <tr>
+          <td>DA to IOD Rent Amount (Rs)</td>
+          <td style="text-align:right;">${dostiDAtoIODHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraDAtoIODHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN')}</td>
+        </tr>
+        <tr>
+          <td>IOD - FCC Rent Amount (Rs)</td>
+          <td style="text-align:right;">${dostiIODtoFCCHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraIODtoFCCHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN')}</td>
+        </tr>
+        <tr class="pastel-blue-row">
+          <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
+          <td style="text-align:right;">${dostiBackdatedHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${ajmeraBackdatedHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${backDatedHindCHSRunwalB.toLocaleString('en-IN')}</td>
+        </tr>
 
         <tr>
           <td>12 Months rent after IOD (Rs)</td>
@@ -2078,16 +2154,13 @@ const gst18ConstructionRunwal = 0;
           <td style="text-align:right;">${runwal37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 <td style="text-align:right;">${runwal37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
                   </tr>
-      <tr class="pastel-blue-row">
-
-  <td><strong>Total Rent (Rs)</strong></td>
-  <td style="text-align:right;">${totalDostiHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  
-  <td style="text-align:right;">${totalAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-    <td style="text-align:right;">${totalRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-    
-</tr>
+  <tr class="pastel-blue-row">
+          <td><strong>Total Rent (Rs)</strong></td>
+          <td style="text-align:right;">${totalDostiHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalAjmeraHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalRunwalHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalRunwalBHindCHS.toLocaleString('en-IN')}</td>
+        </tr>
 
 <tr>
   <td><strong>Corpus (Rs)</strong></td>
@@ -2122,13 +2195,13 @@ const gst18ConstructionRunwal = 0;
   <td style="text-align:right;">0</td>
   <td style="text-align:right;">0</td>
 </tr>
-<tr class="pastel-green-row">
-  <td><strong>Total Cash Compensation (Rs)</strong></td>
-  <td style="text-align:right;">${totalCashDostiHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalCashAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalCashRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  <td style="text-align:right;">${totalCashRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
+        <tr class="pastel-green-row">
+          <td><strong>Total Cash Compensation (Rs)</strong></td>
+          <td style="text-align:right;">${totalCashDostiHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalCashAjmeraHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalCashRunwalHindCHS.toLocaleString('en-IN')}</td>
+          <td style="text-align:right;">${totalCashRunwalBHindCHS.toLocaleString('en-IN')}</td>
+        </tr>
 
       <tr class="pastel-blue-row">
   <td><strong>Value of additional area on completion (Rs)</strong></td>
