@@ -174,57 +174,34 @@
 </head>
 <body>
   <div id="infoSection" style="max-width:470px; margin:40px auto; padding:20px 15px; border:1px solid #ccc; border-radius:10px; background:#f9f9f9;">
-    <h2 style="text-align:center;">Eligibility Calculation Details</h2>
+  <h2 style="text-align:center;">Eligibility Calculation Details</h2>
+  <ul style="font-size:16px; margin-bottom:30px;">
+<div style="text-align:center; font-size:2em; color:#b60000; font-weight:bold; margin:18px 0 24px 0; background:#ffeaea; border-radius:8px; padding:12px;">
+  This is not an official site.
+</div>
+    <li>The numbers shown here are my understanding of last offer provided by the builders.</li>
     <br>
-    <h2 style="text-align:center;">This is <strong>NOT</strong> an official site</h2>
-    <ul style="font-size:16px; margin-bottom:30px;">
-      <li>
-        <strong>Ajmera:</strong>
-        <ul style="margin-left:20px;">
-          <li>Pre-DA rent:
-            <ul style="margin-left:20px;">
-              <li>C wing: <strong>3 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-              <li>D &amp; E wings: <strong>9 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-            </ul>
-          </li>
-          <li>No rent between DA and IOD.</li>
-        </ul>
-      </li>
-      <li style="margin-top:16px;">
-        <strong>Runwal:</strong>
-        <ul style="margin-left:20px;">
-          <li>Pre-DA rent:
-            <ul style="margin-left:20px;">
-              <li>C wing: <strong>6 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-              <li>D &amp; E wings: <strong>9 months</strong> at <strong>Rs 80/sq.ft</strong></li>
-            </ul>
-          </li>
-          <li>
-            Between DA and IOD:
-            <ul style="margin-left:20px;">
-              <li>C, D and E wings: rent for maximum of <strong>8 months</strong> at <strong>Rs 85/sq.ft</strong></li>
-              <li>If A and B have to vacate, they get rent for a maximum of <strong>8 months</strong> or up to IOD, whichever is less, at <strong>Rs 85/sq.ft</strong></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li style="margin-top:16px;">
-        <strong>Dosti:</strong>
-        <ul style="margin-left:20px;">
-          <li>Offering <strong>₹10 Crore 68 Lakhs</strong> to the society, to be divided between all members who have had to vacate.</li>
-          <li>To calculate this split, we can assume what date A &amp; B will vacate – either the IOD date or earlier.</li>
-        </ul>
-      </li>
-    </ul>
-    <div style="font-size:15px; margin:18px 0 0 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
-      <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> and construction cost is assumed to be <strong>₹6,000/sq.ft. <br> It could be one of the four possibilities below</strong>.
-      <br><br>
-      Also, due to rounding off there might be variation for a few hundred rupees in some of the calculations
-    </div>
-    <button id="letsGoBtn" style="margin:30px auto 0 auto; display:block; padding:12px 30px; font-size:17px; background:#3399ff; color:#fff; border:none; border-radius:6px; cursor:pointer;">
-      Got it. Let's go
-    </button>
-  </div>
+    <li>Since my understanding of GST is very limited, I have removed any mention of GST impact but here is the summary of GST in the offer:
+      <ul style="margin-left:20px;">
+        <li>Dosti will cover up to 10 crore GST liability.</li>
+        <li>Ajmera will cover all GST liability.</li>
+        <li>Runwal has provided two options:
+          <ul style="margin-left:20px;">
+            <li>One where they will cover the full GST liability and offer us 58.5% additional area.</li>
+            <li>One where they will cover only half of any potential GST liability but offer us 62.5% additional area.</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <br>
+
+    <li>Dosti and Ajmera are willing to bear up to 3 crore of Collector dues for individual flats should such liabilities arise. Anything above 3 crores will have to be covered by members.</li>
+    <li>Runwal has not agreed to cover any individual members Collector dues.</li>
+  </ul>
+  <button id="letsGoBtn" style="margin:30px auto 0 auto; display:block; padding:12px 30px; font-size:17px; background:#3399ff; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+    Got it. Let's go
+  </button>
+</div>
 
   <!-- Initial Wing selection -->
   <div id="wingSelectionSection" style="display:none;">
@@ -380,10 +357,28 @@
     E: { flatMOFA: 15961.72, totalMOFA: 17231.33 }
   };
 
-  // Default dates (ISO format strings, will change for A & B vacate)
-  let currentDateDA = "2025-12-15";
-  let currentDateIOD = "2026-08-15";
-  let currentDateABVacate = "2026-08-15";
+// Default dates (ISO format strings, will change for A & B vacate)
+let currentDateDA = "2025-12-01";
+let currentDateIOD = "2026-09-01";
+
+// FCC date is IOD date plus 3 months
+function addMonths(dateStr, monthsToAdd) {
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  d.setMonth(d.getMonth() + monthsToAdd);
+  return d.toISOString().slice(0, 10); // Return as YYYY-MM-DD
+}
+let currentDateFCC = addMonths(currentDateIOD, 3);
+
+// Default A/B vacate date is FCC
+let currentDateABVacate = currentDateFCC;
+
+// If user updates IOD, recalculate FCC and AB vacate
+function updateIOD(newIOD) {
+  currentDateIOD = newIOD;
+  currentDateFCC = addMonths(currentDateIOD, 3);
+  currentDateABVacate = currentDateFCC;
+}
 
   // Fixed vacate dates for D and E, and C wings
   const dateDVacated = "2024-07-01";
@@ -407,6 +402,13 @@
   const RATE_AJMERA = 80;
   const RATE_DOSTI = 70;
   const RATE_RUNWAL_DA_IOD = 85;
+const RATE_AJMERA_NEW = 60; // Ajmera's new uniform rate for all periods
+const RATE_DOSTI_PRE_DA = 60;
+const RATE_DOSTI_DA_TO_IOD = 65;
+const RATE_DOSTI_IOD_TO_FCC = 65;
+const MAX_MONTHS_DOSTI_DA_TO_IOD = 9;
+const MAX_MONTHS_DOSTI_IOD_TO_FCC = 3;
+
 
   // Max months caps
   const MAX_MONTHS_DA_TO_IOD = 8;
@@ -421,6 +423,7 @@
   // Add these variables to store the estimates
   let launchPrice = 35000;
   let completionPrice = 35000;
+
 
 
   // DOM elements needed in multiple functions (ensure declared before use)
@@ -510,15 +513,79 @@ letsGoBtn.onclick = function() {
     return d.toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
   }
 
-  function monthsBetween(startDateStr, endDateStr) {
-    const d1 = new Date(startDateStr);
-    const d2 = new Date(endDateStr);
-    if (isNaN(d1) || isNaN(d2)) return 0;
-    let months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months += d2.getMonth() - d1.getMonth();
-    months += (d2.getDate() - d1.getDate()) / 30;
-    if (months < 0) return 0;
-    return months;
+  // Add this utility function to add months to a date string
+  function addMonths(dateStr, monthsToAdd) {
+    const d = new Date(dateStr);
+    if (isNaN(d)) return dateStr;
+    d.setMonth(d.getMonth() + monthsToAdd);
+    return d.toISOString().slice(0, 10); // Return as YYYY-MM-DD
+  }
+
+function monthsBetween(startDateStr, endDateStr) {
+  const d1 = new Date(startDateStr);
+  const d2 = new Date(endDateStr);
+  if (isNaN(d1) || isNaN(d2)) return 0;
+  let months =
+    (d2.getFullYear() - d1.getFullYear()) * 12 +
+    (d2.getMonth() - d1.getMonth());
+  // If the end day is less than the start day, subtract one month
+  if (d2.getDate() < d1.getDate()) {
+    months -= 1;
+  }
+  return Math.max(months, 0);
+}
+
+// Utility function to get months between IOD and FCC
+function monthsBetweenIODandFCC(iodDateStr, fccDateStr) {
+  return monthsBetween(iodDateStr, fccDateStr); // usually 3
+}
+
+// Calculate IOD - FCC rent for user
+  // Calculate IOD - FCC rent for user
+  function calculateIODtoFCCRentForUser(flatAreaSqFtInput) {
+    if (!selectedWing || !flatAreaSqFtInput || flatAreaSqFtInput === 0) {
+      return { runwal: 0, ajmera: 0 };
+    }
+    const months = monthsBetween(currentDateIOD, currentDateFCC);
+
+    let runwalRent = 0;
+    let ajmeraRent = 0;
+
+    // For A or B wing, only pay if vacate date is before FCC
+    if ((selectedWing === 'A' || selectedWing === 'B')) {
+      const vacateDate = wingVacateDates[selectedWing];
+      if (new Date(vacateDate) < new Date(currentDateFCC)) {
+        runwalRent = RATE_RUNWAL_DA_IOD * flatAreaSqFtInput * months;
+        ajmeraRent = 0; // Ajmera does not pay IOD-FCC
+      }
+    } else {
+      // For C, D, E, always pay
+      runwalRent = RATE_RUNWAL_DA_IOD * flatAreaSqFtInput * months;
+      ajmeraRent = 0;
+    }
+    return { runwal: runwalRent, ajmera: ajmeraRent };
+  }
+
+  // Calculate IOD - FCC rent for Hind CHS (sum over all wings)
+  function calculateIODtoFCCRentForHindCHS() {
+    let runwalRentSum = 0;
+    for (const wing in wingAreas) {
+      if (!wingAreas.hasOwnProperty(wing)) continue;
+      const flatArea = wingAreas[wing].flatMOFA;
+      const months = monthsBetween(currentDateIOD, currentDateFCC);
+
+      // For A and B, only pay if vacate date is before FCC
+      if (wing === 'A' || wing === 'B') {
+        const vacateDate = wingVacateDates[wing];
+        if (new Date(vacateDate) < new Date(currentDateFCC)) {
+          runwalRentSum += RATE_RUNWAL_DA_IOD * flatArea * months;
+        }
+      } else {
+        // For C, D, E, always pay
+        runwalRentSum += RATE_RUNWAL_DA_IOD * flatArea * months;
+      }
+    }
+    return { runwalRent: runwalRentSum, ajmeraRent: 0 };
   }
 
   function monthsDiffCapped(startDateStr, endDateStr, maxMonths) {
@@ -551,13 +618,13 @@ letsGoBtn.onclick = function() {
   }
 
   // Pre-DA months per wing and offer mappings
-  const preDAMonthsRunwalPerWing = { A: 0, B: 0, C: 6, D: 9, E: 9 };
+  const preDAMonthsRunwalPerWing = { A: 0, B: 0, C: 6, D: 12, E: 12 };
   const preDAMonthsAjmeraPerWing = { A: 0, B: 0, C: 3, D: 9, E: 9 };
   const preDAMonthsDostiPerWing = { A: 12, B: 12, C: 12, D: 12, E: 12 };
 
 
  // Show Summary Table after MOFA area form submit
-  function showSummaryTable() {
+function showSummaryTable() {
     message.innerText = '';
     mofaMessage.innerText = '';
     unitMessage.innerText = '';
@@ -577,6 +644,9 @@ letsGoBtn.onclick = function() {
 
     const {flatSqft, flatSqm, commonSqft, commonSqm, totalSqft, totalSqm} = getAllAreaVals();
 
+    // FCC date is IOD date plus 3 months
+    const currentDateFCC = addMonths(currentDateIOD, 3);
+
     summaryTableContainer.innerHTML = `
       <h3 style="text-align: center; margin-bottom: 10px;">Basic Flat Data</h3>
       <table>
@@ -590,6 +660,7 @@ letsGoBtn.onclick = function() {
           <tr><td><strong>Total MOFA carpet area</strong></td><td><strong>${totalSqft.toFixed(2)}</strong></td><td><strong>${totalSqm.toFixed(2)}</strong></td></tr>
           <tr><td><strong>Date of DA</strong></td><td colspan="2" style="text-align:center;">${formatDatePretty(currentDateDA)}</td></tr>
           <tr><td><strong>Date of IOD</strong></td><td colspan="2" style="text-align:center;">${formatDatePretty(currentDateIOD)}</td></tr>
+          <tr><td><strong>Date of FCC</strong></td><td colspan="2" style="text-align:center;">${formatDatePretty(currentDateFCC)}</td></tr>
           <tr><td><strong>Date A and B wings vacate</strong></td><td colspan="2" style="text-align:center;">${formatDatePretty(currentDateABVacate)}</td></tr>
         </tbody>
       </table>`;
@@ -605,6 +676,7 @@ letsGoBtn.onclick = function() {
     dateInputsDiv.style.display = 'none';
   }
 
+
   // Show All Basic Inputs Table with full info
 // Show All Basic Inputs Table with full info
 function showAllBasicInputsTable() {
@@ -612,6 +684,9 @@ function showAllBasicInputsTable() {
 
   const hindCHSFlatMOFA = wingAreas.A.flatMOFA + wingAreas.B.flatMOFA + wingAreas.C.flatMOFA + wingAreas.D.flatMOFA + wingAreas.E.flatMOFA;
   const hindCHSTotalMOFA = wingAreas.A.totalMOFA + wingAreas.B.totalMOFA + wingAreas.C.totalMOFA + wingAreas.D.totalMOFA + wingAreas.E.totalMOFA;
+
+  // FCC date is IOD date plus 3 months
+  const currentDateFCC = addMonths(currentDateIOD, 3);
 
   allBasicInputsTableContainer.innerHTML = `
     <table>
@@ -625,6 +700,7 @@ function showAllBasicInputsTable() {
         <tr><td><strong>Total MOFA carpet area</strong></td><td><strong>${totalSqft.toFixed(2)} sq.ft. / ${totalSqm.toFixed(2)} sq.m.</strong></td></tr>
         <tr><td><strong>Date of DA</strong></td><td>${formatDatePretty(currentDateDA)}</td></tr>
         <tr><td><strong>Date of IOD</strong></td><td>${formatDatePretty(currentDateIOD)}</td></tr>
+        <tr><td><strong>Date of FCC</strong></td><td>${formatDatePretty(currentDateFCC)}</td></tr>
         <tr><td><strong>Date A and B wings vacate</strong></td><td>${formatDatePretty(currentDateABVacate)}</td></tr>
         <tr><td><strong>Date D and E wings vacated</strong></td><td>${formatDatePretty(dateDVacated)}</td></tr>
         <tr><td><strong>Date C wing vacated</strong></td><td>${formatDatePretty(dateCVacated)}</td></tr>
@@ -668,7 +744,7 @@ function showAllBasicInputsTable() {
       runwalMonths = 6;
       ajmeraMonths = 3;
     } else if (selectedWing === 'D' || selectedWing === 'E') {
-      runwalMonths = 9;
+      runwalMonths = 12;
       ajmeraMonths = 9;
     }
 
@@ -687,22 +763,18 @@ function showAllBasicInputsTable() {
   }
 
   let daToIODMonths = 0;
-  const MAX_MONTHS = MAX_MONTHS_DA_TO_IOD;
-
-  if (selectedWing === 'C' || selectedWing === 'D' || selectedWing === 'E') {
-    daToIODMonths = monthsDiffCapped(currentDateDA, currentDateIOD, MAX_MONTHS);
-  } else if (selectedWing === 'A' || selectedWing === 'B') {
-    const vacateDate = wingVacateDates[selectedWing];
-    if (new Date(vacateDate) < new Date(currentDateIOD)) {
-      if (new Date(vacateDate) < new Date(currentDateDA)) {
-        // Vacated before DA: Only DA to IOD months
-        daToIODMonths = monthsDiffCapped(currentDateDA, currentDateIOD, MAX_MONTHS);
-      } else {
-        // Vacated after DA: vacateDate to IOD months
-        daToIODMonths = monthsDiffCapped(vacateDate, currentDateIOD, MAX_MONTHS);
-      }
+if (selectedWing === 'C' || selectedWing === 'D' || selectedWing === 'E') {
+  daToIODMonths = monthsBetween(currentDateDA, currentDateIOD);
+} else if (selectedWing === 'A' || selectedWing === 'B') {
+  const vacateDate = wingVacateDates[selectedWing];
+  if (new Date(vacateDate) < new Date(currentDateIOD)) {
+    if (new Date(vacateDate) < new Date(currentDateDA)) {
+      daToIODMonths = monthsBetween(currentDateDA, currentDateIOD);
+    } else {
+      daToIODMonths = monthsBetween(vacateDate, currentDateIOD);
     }
   }
+}
 
   const runwalRent = RATE_RUNWAL_DA_IOD * flatAreaSqFtInput * daToIODMonths;
   const ajmeraRent = 0;
@@ -728,26 +800,20 @@ function showAllBasicInputsTable() {
   // Hind CHS DA to IOD rent
 function calculateDAtoIODRentForHindCHS() {
   let runwalRentSum = 0;
-  const MAX_MONTHS = MAX_MONTHS_DA_TO_IOD;
-  for (const wing in wingAreas) {
-    if (!wingAreas.hasOwnProperty(wing)) continue;
-    let months = 0;
-    if (wing === 'C' || wing === 'D' || wing === 'E') {
-      // For C/D/E: DA to IOD period (capped at 8 months)
-      months = monthsDiffCapped(currentDateDA, currentDateIOD, MAX_MONTHS);
-    } else if (wing === 'A' || wing === 'B') {
-      // For A/B: Only DA to IOD if vacate date is before DA; otherwise vacate date to IOD if after DA, capped at 8 months
-      const vacateDate = wingVacateDates[wing];
-      if (new Date(vacateDate) < new Date(currentDateIOD)) {
-        if (new Date(vacateDate) < new Date(currentDateDA)) {
-          // Vacated before DA: Only DA to IOD period
-          months = monthsDiffCapped(currentDateDA, currentDateIOD, MAX_MONTHS);
-        } else {
-          // Vacated after DA: vacateDate to IOD
-          months = monthsDiffCapped(vacateDate, currentDateIOD, MAX_MONTHS);
-        }
+for (const wing in wingAreas) {
+  let months = 0;
+  if (wing === 'C' || wing === 'D' || wing === 'E') {
+    months = monthsBetween(currentDateDA, currentDateIOD);
+  } else if (wing === 'A' || wing === 'B') {
+    const vacateDate = wingVacateDates[wing];
+    if (new Date(vacateDate) < new Date(currentDateIOD)) {
+      if (new Date(vacateDate) < new Date(currentDateDA)) {
+        months = monthsBetween(currentDateDA, currentDateIOD);
+      } else {
+        months = monthsBetween(vacateDate, currentDateIOD);
       }
     }
+  }
     const flatArea = wingAreas[wing].flatMOFA;
     runwalRentSum += RATE_RUNWAL_DA_IOD * flatArea * months;
   }
@@ -1134,6 +1200,130 @@ function calculateDAtoIODRentForHindCHS() {
     alert("Next step triggered! Implement further workflow here.");
   });
 
+
+function calculateABWingBackdatedRent(flatAreaSqFtInput, vacateDateStr, iodDateStr, fccDateStr) {
+  const vacateDate = new Date(vacateDateStr);
+  const iodDate = new Date(iodDateStr);
+  const fccDate = new Date(fccDateStr);
+
+  let daToIODRent = 0;
+  let iodToFCCRent = 0;
+
+  if (vacateDate < iodDate) {
+    // Eligible: (Vacate → IOD) + (IOD → FCC)
+    const monthsVacateToIOD = monthsBetween(vacateDateStr, iodDateStr);
+    const monthsIODToFCC = monthsBetween(iodDateStr, fccDateStr);
+    daToIODRent   = flatAreaSqFtInput * RATE_RUNWAL_DA_IOD * monthsVacateToIOD;
+    iodToFCCRent  = flatAreaSqFtInput * RATE_RUNWAL_DA_IOD * monthsIODToFCC;
+  } else if (vacateDate > iodDate && vacateDate < fccDate) {
+    // Eligible: (Vacate → FCC)
+    const monthsVacateToFCC = monthsBetween(vacateDateStr, fccDateStr);
+    daToIODRent  = 0;
+    iodToFCCRent = flatAreaSqFtInput * RATE_RUNWAL_DA_IOD * monthsVacateToFCC;
+  } else {
+    // Vacate on/after FCC: no backdated rent
+    daToIODRent  = 0;
+    iodToFCCRent = 0;
+  }
+  return {
+    daToIODRent,
+    iodToFCCRent,
+    totalBackdatedRent: daToIODRent + iodToFCCRent
+  };
+}
+
+// Ajmera Pre-DA rent, no capping, only if vacated before DA
+function calculateAjmeraPreDARentForUser(flatAreaSqFtInput, vacateDateStr, preDAStart, daDate) {
+  const vacateDate = new Date(vacateDateStr);
+  const da = new Date(daDate);
+  if (vacateDate < da) {
+    const months = monthsBetween(preDAStart, daDate);
+    return RATE_AJMERA_NEW * flatAreaSqFtInput * months;
+  }
+  return 0;
+}
+
+// Ajmera DA to IOD rent, no capping, only if vacated before IOD
+function calculateAjmeraDAtoIODRentForUser(flatAreaSqFtInput, vacateDateStr, daDate, iodDate) {
+  const vacateDate = new Date(vacateDateStr);
+  const iod = new Date(iodDate);
+  const da = new Date(daDate);
+  if (vacateDate < iod) {
+    const start = (vacateDate > da) ? vacateDateStr : daDate;
+    const months = monthsBetween(start, iodDate);
+    return RATE_AJMERA_NEW * flatAreaSqFtInput * months;
+  }
+  return 0;
+}
+
+// Ajmera IOD to FCC rent, no capping, only if vacated before FCC
+function calculateAjmeraIODtoFCCRentForUser(flatAreaSqFtInput, vacateDateStr, iodDate, fccDate) {
+  const vacateDate = new Date(vacateDateStr);
+  const iod = new Date(iodDate);
+  const fcc = new Date(fccDate);
+  if (vacateDate < fcc) {
+    const start = (vacateDate > iod) ? vacateDateStr : iodDate;
+    const months = monthsBetween(start, fccDate);
+    return RATE_AJMERA_NEW * flatAreaSqFtInput * months;
+  }
+  return 0;
+}
+
+
+function calculateDostiPreDARentForUser(flatAreaSqFtInput, wing, vacateDateStr, daDate) {
+  const vacateDate = new Date(vacateDateStr);
+  const da = new Date(daDate);
+
+  // Only if vacated before DA
+  if (vacateDate >= da) return 0;
+
+  let maxMonths = 0;
+  if (wing === 'D' || wing === 'E') maxMonths = 12;
+  else if (wing === 'C') maxMonths = 9;
+  else if (wing === 'A' || wing === 'B') maxMonths = 3;
+  else return 0;
+
+  // Months from vacate date to DA, capped by maxMonths
+  const actualMonths = Math.min(monthsBetween(vacateDateStr, daDate), maxMonths);
+  if (actualMonths <= 0) return 0;
+
+  return RATE_DOSTI_PRE_DA * flatAreaSqFtInput * actualMonths;
+}
+
+// Dosti DA to IOD rent: Rs 65/sqft, max 9 months, only if vacated before IOD
+function calculateDostiDAtoIODRentForUser(flatAreaSqFtInput, wing, vacateDateStr, daDate, iodDate) {
+  const vacateDate = new Date(vacateDateStr);
+  const da = new Date(daDate);
+  const iod = new Date(iodDate);
+
+  if (vacateDate >= iod) return 0; // Only if vacated before IOD
+
+  // DA to IOD period starts from DA or vacate date, whichever is later
+  const startDate = vacateDate > da ? vacateDateStr : daDate;
+  const months = Math.min(monthsBetween(startDate, iodDate), MAX_MONTHS_DOSTI_DA_TO_IOD);
+  if (months <= 0) return 0;
+
+  return RATE_DOSTI_DA_TO_IOD * flatAreaSqFtInput * months;
+}
+
+// Dosti IOD to FCC rent: Rs 65/sqft, max 3 months, only if vacated before FCC
+function calculateDostiIODtoFCCRentForUser(flatAreaSqFtInput, wing, vacateDateStr, iodDate, fccDate) {
+  const vacateDate = new Date(vacateDateStr);
+  const iod = new Date(iodDate);
+  const fcc = new Date(fccDate);
+
+  if (vacateDate >= fcc) return 0; // Only if vacated before FCC
+
+  // IOD to FCC period starts from IOD or vacate date, whichever is later
+  const startDate = vacateDate > iod ? vacateDateStr : iodDate;
+  const months = Math.min(monthsBetween(startDate, fccDate), MAX_MONTHS_DOSTI_IOD_TO_FCC);
+  if (months <= 0) return 0;
+
+  return RATE_DOSTI_IOD_TO_FCC * flatAreaSqFtInput * months;
+}
+
+
+
   // Compare button: all calculations and render eligibility tables
  compareButton.onclick = function() {
   // Convert user input areas to sq.ft. if entered in sqm
@@ -1149,13 +1339,131 @@ function calculateDAtoIODRentForHindCHS() {
   const userCommonCarpetAreaSqFt = commonAreaSqFtUsr;
   const totalMOFAUserSqFt = userFlatCarpetAreaSqFt + userCommonCarpetAreaSqFt;
 
+const memberCollectorDues = 30000000; // 3 crore
+
+
+
+// Ajmera new logic: all periods at 60/sqft, only if vacated, no time cap
+const ajmeraPreDARent = calculateAjmeraPreDARentForUser(
+  userFlatCarpetAreaSqFt,
+  wingVacateDates[selectedWing], // user's vacate date (also preDAStart)
+  wingVacateDates[selectedWing],
+  currentDateDA
+);
+
+const ajmeraDAtoIODRent = calculateAjmeraDAtoIODRentForUser(
+  userFlatCarpetAreaSqFt,
+  wingVacateDates[selectedWing],
+  currentDateDA,
+  currentDateIOD
+);
+
+const ajmeraIODtoFCCRent = calculateAjmeraIODtoFCCRentForUser(
+  userFlatCarpetAreaSqFt,
+  wingVacateDates[selectedWing],
+  currentDateIOD,
+  currentDateFCC
+);
+
+const ajmeraBackdatedRent = ajmeraPreDARent + ajmeraDAtoIODRent + ajmeraIODtoFCCRent;
+
+const dostiPreDARent = calculateDostiPreDARentForUser(
+  userFlatCarpetAreaSqFt,
+  selectedWing,
+  wingVacateDates[selectedWing],
+  currentDateDA
+);
+
+const dostiDAtoIODRent = calculateDostiDAtoIODRentForUser(
+  userFlatCarpetAreaSqFt,
+  selectedWing,
+  wingVacateDates[selectedWing],
+  currentDateDA,
+  currentDateIOD
+);
+
+const dostiIODtoFCCRent = calculateDostiIODtoFCCRentForUser(
+  userFlatCarpetAreaSqFt,
+  selectedWing,
+  wingVacateDates[selectedWing],
+  currentDateIOD,
+  currentDateFCC
+);
+
+const dostiBackdatedRent = dostiPreDARent + dostiDAtoIODRent + dostiIODtoFCCRent;
+
   // Calculate eligibility rents (Pre-DA) with flat area in sq.ft.
   const eligibility = calculateEligibility(userFlatCarpetAreaSqFt);
   if (!eligibility) return;
 
   const { runwalRent, ajmeraRent } = eligibility;
+  
+  
   // DA to IOD rent for user with flat area in sq.ft.
-  const daToIODUser = calculateDAtoIODRentForUser(userFlatCarpetAreaSqFt);
+let daToIODUser = { runwal: 0, ajmera: 0 };
+let iodToFCCUser = { runwal: 0, ajmera: 0 };
+let runwalBackdatedRent = runwalRent; // fallback for C/D/E
+
+if (selectedWing === 'A' || selectedWing === 'B') {
+  const abBackdated = calculateABWingBackdatedRent(
+    userFlatCarpetAreaSqFt,
+    wingVacateDates[selectedWing],
+    currentDateIOD,
+    currentDateFCC
+  );
+  runwalBackdatedRent = abBackdated.totalBackdatedRent;
+  daToIODUser.runwal = abBackdated.daToIODRent;
+  iodToFCCUser.runwal = abBackdated.iodToFCCRent;
+} else {
+  daToIODUser = calculateDAtoIODRentForUser(userFlatCarpetAreaSqFt);
+  iodToFCCUser = calculateIODtoFCCRentForUser(userFlatCarpetAreaSqFt);
+  runwalBackdatedRent = runwalRent + daToIODUser.runwal + iodToFCCUser.runwal;
+}
+
+
+// Ajmera Hind CHS new logic: all periods at 60/sqft, only if vacated, no time cap
+let ajmeraBackdatedHindCHS = 0;
+for (const wing in wingAreas) {
+  const flatArea = wingAreas[wing].flatMOFA;
+  const vacateDate = wingVacateDates[wing];
+
+  // Pre-DA period: vacateDate to DA
+  const preDA = calculateAjmeraPreDARentForUser(flatArea, vacateDate, vacateDate, currentDateDA);
+  // DA to IOD: DA to IOD, eligible if vacated before IOD
+  const daIOD = calculateAjmeraDAtoIODRentForUser(flatArea, vacateDate, currentDateDA, currentDateIOD);
+  // IOD to FCC: IOD to FCC, eligible if vacated before FCC
+  const iodFCC = calculateAjmeraIODtoFCCRentForUser(flatArea, vacateDate, currentDateIOD, currentDateFCC);
+
+  ajmeraBackdatedHindCHS += preDA + daIOD + iodFCC;
+}
+
+// NEW: Sum Ajmera Pre-DA, DA-IOD, and IOD-FCC values for Hind CHS for table display
+let ajmeraPreDAHindCHS = 0, ajmeraDAtoIODHindCHS = 0, ajmeraIODtoFCCHindCHS = 0;
+for (const wing in wingAreas) {
+  const flatArea = wingAreas[wing].flatMOFA;
+  const vacateDate = wingVacateDates[wing];
+  ajmeraPreDAHindCHS += calculateAjmeraPreDARentForUser(flatArea, vacateDate, vacateDate, currentDateDA);
+  ajmeraDAtoIODHindCHS += calculateAjmeraDAtoIODRentForUser(flatArea, vacateDate, currentDateDA, currentDateIOD);
+  ajmeraIODtoFCCHindCHS += calculateAjmeraIODtoFCCRentForUser(flatArea, vacateDate, currentDateIOD, currentDateFCC);
+}
+
+let dostiPreDAHindCHS = 0;
+for (const wing in wingAreas) {
+  const flatArea = wingAreas[wing].flatMOFA;
+  const vacateDate = wingVacateDates[wing];
+  dostiPreDAHindCHS += calculateDostiPreDARentForUser(flatArea, wing, vacateDate, currentDateDA);
+}
+
+let dostiDAtoIODHindCHS = 0, dostiIODtoFCCHindCHS = 0;
+for (const wing in wingAreas) {
+  const flatArea = wingAreas[wing].flatMOFA;
+  const vacateDate = wingVacateDates[wing];
+  dostiDAtoIODHindCHS += calculateDostiDAtoIODRentForUser(flatArea, wing, vacateDate, currentDateDA, currentDateIOD);
+  dostiIODtoFCCHindCHS += calculateDostiIODtoFCCRentForUser(flatArea, wing, vacateDate, currentDateIOD, currentDateFCC);
+}
+
+const dostiBackdatedHindCHS = dostiPreDAHindCHS + dostiDAtoIODHindCHS + dostiIODtoFCCHindCHS;
+
 
   // User wing's vacate date
   const userVacateDateStr = wingVacateDates[selectedWing];
@@ -1207,8 +1515,35 @@ function calculateDAtoIODRentForHindCHS() {
 
 const hindCHS = calculateHindCHSEligibility();
     const daToIODHindCHS = calculateDAtoIODRentForHindCHS();
+	const iodToFCCHindCHS = calculateIODtoFCCRentForHindCHS();
 
-    const backDatedHindCHSRunwal = hindCHS.runwalRent + daToIODHindCHS.runwalRent;
+// Hind CHS backdated rent for Runwal (pre-DA + DA to IOD + IOD to FCC)
+let backDatedHindCHSRunwal = 0;
+for (const wing in wingAreas) {
+  const flatArea = wingAreas[wing].flatMOFA;
+  const vacateDateStr = wingVacateDates[wing];
+
+  // Pre-DA rent
+  let preDAMonths = preDAMonthsRunwalPerWing[wing] || 0;
+  let preDARent = flatArea * RATE_RUNWAL * preDAMonths;
+
+  let daToIODRent = 0;
+  let iodToFCCRent = 0;
+
+  if (wing === 'A' || wing === 'B') {
+    // Use AB logic
+    const abWingBackdated = calculateABWingBackdatedRent(flatArea, vacateDateStr, currentDateIOD, currentDateFCC);
+    daToIODRent = abWingBackdated.daToIODRent;
+    iodToFCCRent = abWingBackdated.iodToFCCRent;
+  } else {
+    // For C/D/E, full DA-IOD and IOD-FCC
+    daToIODRent = flatArea * RATE_RUNWAL_DA_IOD * monthsBetween(currentDateDA, currentDateIOD);
+    iodToFCCRent = flatArea * RATE_RUNWAL_DA_IOD * monthsBetween(currentDateIOD, currentDateFCC);
+  }
+
+  backDatedHindCHSRunwal += preDARent + daToIODRent + iodToFCCRent;
+}
+
     const backDatedHindCHSAjmera = hindCHS.ajmeraRent + daToIODHindCHS.ajmeraRent;
     const backDatedHindCHSDosti = hindCHS.dostiRent; // pre-DA only
 
@@ -1221,8 +1556,10 @@ const hindCHS = calculateHindCHSEligibility();
   // Proposed Area for Hind CHS
   const proposedAreaHindCHS = {
     Dosti: hindCHSTotalMOFA * 1.65,
-    Ajmera: hindCHSTotalMOFA * 1.54,
-    Runwal: hindCHSTotalMOFA * 1.575,
+    Ajmera: hindCHSTotalMOFA * 1.57,
+    Runwal: hindCHSTotalMOFA * 1.585,
+      RunwalB: hindCHSTotalMOFA * 1.625
+
   };
 
   // Hind CHS 12-month rents after DA
@@ -1247,24 +1584,65 @@ const hindCHS = calculateHindCHSEligibility();
 
 
 // Calculate totals for Your eligibility table (user)
-const totalRunwalUser = (runwalRent + daToIODUser.runwal) + runwal12MonthRentUser + runwal13_24MonthRentUser + runwal25_36MonthRentUser + runwal37_42MonthRentUser;
-const totalAjmeraUser = (ajmeraRent + daToIODUser.ajmera) + ajmera12MonthRentUser + ajmera13_24MonthRentUser + ajmera25_36MonthRentUser + ajmera37_42MonthRentUser;
-const totalDostiUser = proportionalDostiCompensation + dosti12MonthRentUser + dosti13_24MonthRentUser + dosti25_36MonthRentUser + dosti37_42MonthRentUser;
+// --- UPDATED CODE: INCLUDE IOD to FCC rent ---
+const totalRunwalUser = (runwalRent + daToIODUser.runwal + iodToFCCUser.runwal) 
+  + runwal12MonthRentUser 
+  + runwal13_24MonthRentUser 
+  + runwal25_36MonthRentUser 
+  + runwal37_42MonthRentUser;
 
-// Calculate totals for Hind CHS eligibility table
-const totalRunwalHindCHS = backDatedHindCHSRunwal + runwal12MonthRentHindCHS + runwal13_24MonthRentHindCHS + runwal25_36MonthRentHindCHS + runwal37_42MonthRentHindCHS;
-const totalAjmeraHindCHS = backDatedHindCHSAjmera + ajmera12MonthRentHindCHS + ajmera13_24MonthRentHindCHS + ajmera25_36MonthRentHindCHS + ajmera37_42MonthRentHindCHS;
-const totalDostiHindCHS = backDatedHindCHSDosti + dosti12MonthRentHindCHS + dosti13_24MonthRentHindCHS + dosti25_36MonthRentHindCHS + dosti37_42MonthRentHindCHS;
+const totalAjmeraUser = (ajmeraPreDARent + ajmeraDAtoIODRent + ajmeraIODtoFCCRent)
+  + ajmera12MonthRentUser 
+  + ajmera13_24MonthRentUser 
+  + ajmera25_36MonthRentUser 
+  + ajmera37_42MonthRentUser;
 
+// For Dosti, add iodToFCCUser.dosti if your IOD-FCC calculation for Dosti returns a value (else, leave as is)
+const totalDostiUser = (
+  dostiPreDARent
+  + dostiDAtoIODRent
+  + dostiIODtoFCCRent
+  + dosti12MonthRentUser 
+  + dosti13_24MonthRentUser 
+  + dosti25_36MonthRentUser 
+  + dosti37_42MonthRentUser
+);
+  
+  
+
+// --- UPDATED CODE: INCLUDE IOD to FCC rent ---
+const totalRunwalHindCHS = (backDatedHindCHSRunwal)
+  + runwal12MonthRentHindCHS 
+  + runwal13_24MonthRentHindCHS 
+  + runwal25_36MonthRentHindCHS 
+  + runwal37_42MonthRentHindCHS;
+
+const totalAjmeraHindCHS = (ajmeraPreDAHindCHS + ajmeraDAtoIODHindCHS + ajmeraIODtoFCCHindCHS)
+  + ajmera12MonthRentHindCHS 
+  + ajmera13_24MonthRentHindCHS 
+  + ajmera25_36MonthRentHindCHS 
+  + ajmera37_42MonthRentHindCHS;
+
+const totalDostiHindCHS = (
+  dostiPreDAHindCHS
+  + dostiDAtoIODHindCHS
+  + dostiIODtoFCCHindCHS
+  + dosti12MonthRentHindCHS 
+  + dosti13_24MonthRentHindCHS 
+  + dosti25_36MonthRentHindCHS 
+  + dosti37_42MonthRentHindCHS
+);
+  
+  
 // Corpus for user (Flat MOFA in sq.ft.)
 const corpusAjmeraUser = 900 * userFlatCarpetAreaSqFt;
 const corpusRunwalUser = 1000 * userFlatCarpetAreaSqFt;
-const corpusDostiUser = 50000; // flat per flat
+const corpusDostiUser = 1000 * userFlatCarpetAreaSqFt;
 
 // Corpus for Hind CHS (total flat MOFA area)
 const corpusAjmeraHindCHS = 900 * hindCHSFlatMOFA;
 const corpusRunwalHindCHS = 1000 * hindCHSFlatMOFA;
-const corpusDostiHindCHS = 50000 * 256;
+const corpusDostiHindCHS = 1000 * hindCHSFlatMOFA;
 
 // Shifting charges for user (per flat)
 const shiftingRunwalUser = 50000;
@@ -1277,14 +1655,14 @@ const shiftingAjmeraHindCHS = 60000 * 256;
 const shiftingDostiHindCHS = 50000 * 256;
 
 // Brokerage for user
-const brokerageAjmeraUser = 80 * userFlatCarpetAreaSqFt; 
+const brokerageAjmeraUser = 80 * userFlatCarpetAreaSqFt * 2; 
 const brokerageRunwalUser = 85 * userFlatCarpetAreaSqFt;
-const brokerageDostiUser = 110 * userFlatCarpetAreaSqFt;
+const brokerageDostiUser = 85 * userFlatCarpetAreaSqFt;
 
 // Brokerage for Hind CHS (total flat MOFA area)
-const brokerageAjmeraHindCHS = 80 * hindCHSFlatMOFA;
+const brokerageAjmeraHindCHS = 80 * hindCHSFlatMOFA * 2;
 const brokerageRunwalHindCHS = 85 * hindCHSFlatMOFA;
-const brokerageDostiHindCHS = 110 * hindCHSFlatMOFA;
+const brokerageDostiHindCHS = 85 * hindCHSFlatMOFA;
 
 // Calculate Total Cash Compensation for Your eligibility (user)
 const totalCashRunwalUser = totalRunwalUser + corpusRunwalUser + shiftingRunwalUser + brokerageRunwalUser;
@@ -1293,8 +1671,9 @@ const totalCashDostiUser = totalDostiUser + corpusDostiUser + shiftingDostiUser 
 
 // Calculate Total Cash Compensation for Hind CHS eligibility
 const totalCashRunwalHindCHS = totalRunwalHindCHS + corpusRunwalHindCHS + shiftingRunwalHindCHS + brokerageRunwalHindCHS;
-const totalCashAjmeraHindCHS = totalAjmeraHindCHS + corpusAjmeraHindCHS + shiftingAjmeraHindCHS + brokerageAjmeraHindCHS;
-const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingDostiHindCHS + brokerageDostiHindCHS;
+const totalCashAjmeraHindCHS = totalAjmeraHindCHS + corpusAjmeraHindCHS + shiftingAjmeraHindCHS + brokerageAjmeraHindCHS + memberCollectorDues;
+const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingDostiHindCHS + brokerageDostiHindCHS + memberCollectorDues;
+
 
 
 
@@ -1307,38 +1686,50 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
           <th>Dosti</th>
           <th>Ajmera</th>
           <th>Runwal</th>
+          <th>Runwal-B</th>
+
         </tr>
       </thead>
       <tbody>
     	<tr class="pastel-green-row">
 
           <td><strong>Proposed Area (sq.ft.)</strong></td>
-          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.65).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
-          
-          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.54).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
-          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.575).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
+          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.65).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}      
+          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.57).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
+          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.585).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
+          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.625).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
         </tr>
-        <tr>
-          <td>Pre-DA Rent Amount (Rs)</td>
-          <td style="text-align:center;">&ndash;</td>
-          <td style="text-align:right;">${ajmeraRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-        <tr>
-          <td>DA to IOD Rent Amount (Rs)</td>
-          <td style="text-align:center;">&ndash;</td>
-        	<td style="text-align:right;">${daToIODUser.ajmera.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
+ <tr>
+  <td>Pre-DA Rent Amount (Rs)</td>
+  <td style="text-align:right;">${dostiPreDARent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraPreDARent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+    <td style="text-align:right;">${runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+</tr>
+<tr>
+  <td>DA to IOD Rent Amount (Rs)</td>
+  <td style="text-align:right;">${dostiDAtoIODRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraDAtoIODRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  </tr>
+<tr>
+  <td>IOD - FCC Rent Amount (Rs)</td>
+  <td style="text-align:right;">${dostiIODtoFCCRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraIODtoFCCRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+</tr>
+<tr class="pastel-blue-row">
+  <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
+  <td style="text-align:right;">${dostiBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${runwalBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${runwalBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+</tr>
 
-            	<tr class="pastel-blue-row">
-          <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
-          <td style="text-align:right;">${proportionalDostiCompensation.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          
-          <td style="text-align:right;">${(ajmeraRent + daToIODUser.ajmera).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${(runwalRent + daToIODUser.runwal).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-        <tr>
+
+   <tr>
   <td>12 Months Rent After IOD (Rs)</td>
   <td style="text-align:right;">
     ${dosti12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
@@ -1358,6 +1749,13 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
       (${(runwal12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
     </span>
   </td>
+    <td style="text-align:right;">
+    ${runwal12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+
 </tr>        
 
 
@@ -1373,6 +1771,12 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
     ${ajmera13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
     <span style="font-size:0.95em;color:#666;">
       (${(ajmera13_24MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
+  <td style="text-align:right;">
+    ${runwal13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal13_24MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
     </span>
   </td>
   <td style="text-align:right;">
@@ -1402,6 +1806,12 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
       (${(runwal25_36MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
     </span>
   </td>
+  <td style="text-align:right;">
+    ${runwal25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal25_36MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
 </tr>
 <tr>
   <td>37 - 42 Months Rent After IOD (Rs)</td>
@@ -1423,6 +1833,12 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
       (${(runwal37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
     </span>
   </td>
+  <td style="text-align:right;">
+    ${runwal37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
+    <span style="font-size:0.95em;color:#666;">
+      (${(runwal37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
+    </span>
+  </td>
 </tr>
 
        <tr class="pastel-blue-row">
@@ -1430,7 +1846,8 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
   <td style="text-align:right;">${totalDostiUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${totalAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${totalRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
+  <td style="text-align:right;">${totalRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  </tr>
 
 <tr>
   <td><strong>Corpus (Rs)</strong></td>
@@ -1438,6 +1855,7 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
   
   <td style="text-align:right;">${corpusAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${corpusRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+<td style="text-align:right;">${corpusRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 </tr>
 
 <tr>
@@ -1446,7 +1864,8 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
 
   <td style="text-align:right;">${shiftingAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  </tr>
+  <td style="text-align:right;">${shiftingRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+    </tr>
 
 <tr>
   <td><strong>Brokerage (Rs)</strong></td>
@@ -1454,6 +1873,7 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
   <td style="text-align:right;">${brokerageAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   
   <td style="text-align:right;">${brokerageRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+<td style="text-align:right;">${brokerageRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   </tr>
 
 
@@ -1463,23 +1883,26 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
   <td style="text-align:right;">${totalCashAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   
   <td style="text-align:right;">${totalCashRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+    <td style="text-align:right;">${totalCashRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   </tr>
 
       <tr class="pastel-blue-row">
 
   <td><strong>Value of additional area on completion (Rs)</strong></td>
   <td style="text-align:right;">${((totalMOFAUserSqFt * 1.65 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td> 
-  <td style="text-align:right;">${((totalMOFAUserSqFt * 1.54 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${((totalMOFAUserSqFt * 1.57 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 
-   <td style="text-align:right;">${((totalMOFAUserSqFt * 1.575 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+   <td style="text-align:right;">${((totalMOFAUserSqFt * 1.585 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+   <td style="text-align:right;">${((totalMOFAUserSqFt * 1.625 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 </tr>
 
       <tr class="pastel-green-row">
         <td><strong>New flat value on completion (Rs)</strong></td>
    <td style="text-align:right;">${((totalMOFAUserSqFt * 1.65) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">${((totalMOFAUserSqFt * 1.54) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+        <td style="text-align:right;">${((totalMOFAUserSqFt * 1.57) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         
-        <td style="text-align:right;">${((totalMOFAUserSqFt * 1.575) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+        <td style="text-align:right;">${((totalMOFAUserSqFt * 1.585) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+        <td style="text-align:right;">${((totalMOFAUserSqFt * 1.625) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
            </tr>
 
       </tbody>
@@ -1490,13 +1913,17 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
 // Place this after eligibilityTableContainer.innerHTML (i.e., after "Your eligibility" table, inside compareButton.onclick)
 
 // --- Calculate all values needed ---
-const proposedAreaRunwal = totalMOFAUserSqFt * 1.575;
-const proposedAreaAjmera = totalMOFAUserSqFt * 1.54;
+const proposedAreaRunwal = totalMOFAUserSqFt * 1.585;
+const proposedAreaAjmera = totalMOFAUserSqFt * 1.57;
 const proposedAreaDosti = totalMOFAUserSqFt * 1.65;
+const proposedAreaRunwalB = totalMOFAUserSqFt * 1.625;
+
 
 const additionalAreaRunwal = proposedAreaRunwal - totalMOFAUserSqFt;
 const additionalAreaAjmera = proposedAreaAjmera - totalMOFAUserSqFt;
 const additionalAreaDosti = proposedAreaDosti - totalMOFAUserSqFt;
+const additionalAreaRunwalB = proposedAreaRunwalB - totalMOFAUserSqFt;
+
 
 // Row 2: GST at 5% of additional area
 const gst5AdditionalDosti = (launchPrice * additionalAreaDosti) * 0.05;
@@ -1514,56 +1941,58 @@ const gst18ConstructionAjmera = 0;
 const gst18ConstructionRunwal = 0;
 
 // --- Build Table HTML ---
-const yourLiabilitiesTableHTML = `
-  <h3 style="text-align:center; margin-top:30px;">Your Potential Liabilities</h3>
+//const yourLiabilitiesTableHTML = `
+//  <h3 style="text-align:center; margin-top:30px;">Your Potential Liabilities</h3>
 
-  <div style="font-size:15px; margin:28px 0 8px 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
-  <strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> 
-  (<span id="launchRateInfoInline">₹35,000/sq.ft</span>), and construction cost is assumed to be <strong>₹6,000/sq.ft.</strong> <br> It could be one of the four possibilities below.
-</div>
+ // <div style="font-size:15px; margin:28px 0 8px 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
+  //<strong>Note:</strong> GST is calculated using the per square foot price at <strong>Launch rate</strong> 
+//  (<span id="launchRateInfoInline">₹35,000/sq.ft</span>), and construction cost is assumed to be <strong>₹6,000/sq.ft.</strong> <br> It could be one of the four possibilities below.
+//</div>
 
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th>Dosti</th>
-        <th>Ajmera</th>
-        <th>Runwal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>GST at 0%</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-      <tr>
-        <td>GST at 5% of additional area</td>
-        <td style="text-align:right;">${gst5AdditionalDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-      <tr>
-        <td>GST at 5% of full new area</td>
-        <td style="text-align:right;">${gst5FullDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-      <tr>
-        <td>GST at 5% of construction cost</td>
-        <td style="text-align:right;">${gst18ConstructionDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-    </tbody>
-  </table>
-`;
+//  <table>
+//    <thead>
+ //     <tr>
+   //     <th></th>
+     //   <th>Dosti</th>
+       // <th>Ajmera</th>
+//        <th>Runwal</th>
+ //       <th>Runwal-B</th>
+
+//      </tr>
+//    </thead>
+//    <tbody>
+//      <tr>
+//        <td>GST at 0%</td>
+//        <td style="text-align:right;">0</td>
+//        <td style="text-align:right;">0</td>
+//        <td style="text-align:right;">0</td>
+//      </tr>
+//      <tr>
+//        <td>GST at 5% of additional area</td>
+//        <td style="text-align:right;">${gst5AdditionalDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+//        <td style="text-align:right;">0</td>
+//        <td style="text-align:right;">0</td>
+//      </tr>
+//      <tr>
+//        <td>GST at 5% of full new area</td>
+//        <td style="text-align:right;">${gst5FullDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+//        <td style="text-align:right;">0</td>
+ //       <td style="text-align:right;">0</td>
+//      </tr>
+//      <tr>
+ //       <td>GST at 5% of construction cost</td>
+ //       <td style="text-align:right;">${gst18ConstructionDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+//        <td style="text-align:right;">0</td>
+//        <td style="text-align:right;">0</td>
+//      </tr>
+//    </tbody>
+//  </table>
+//`;
 
 // --- Insert after "Your eligibility" table ---
-eligibilityTableContainer.innerHTML += yourLiabilitiesTableHTML;
+//eligibilityTableContainer.innerHTML += yourLiabilitiesTableHTML;
 // Update launch rate displayed in liabilities note
-document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.toLocaleString('en-IN')}/sq.ft`;
+//document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.toLocaleString('en-IN')}/sq.ft`;
 
   // Build Hind CHS Eligibility table HTML
   hindCHSEligibilityTableContainer.innerHTML = `
@@ -1574,6 +2003,8 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
         <th>Dosti</th>
         <th>Ajmera</th>
         <th>Runwal</th>
+        <th>Runwal-B</th>
+
         </tr>
       </thead>
       <tbody>
@@ -1582,40 +2013,54 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
           <td style="text-align:right;">${proposedAreaHindCHS.Dosti.toFixed(2)}</td>
           <td style="text-align:right;">${proposedAreaHindCHS.Ajmera.toFixed(2)}</td>
           <td style="text-align:right;">${proposedAreaHindCHS.Runwal.toFixed(2)}</td>
+        <td style="text-align:right;">${proposedAreaHindCHS.RunwalB.toFixed(2)}</td>
         </tr>
-        <tr>
-          <td>Pre-DA Rent Amount (Rs)</td>
-          <td style="text-align:center;">&ndash;</td>
-          <td style="text-align:right;">${hindCHS.ajmeraRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-        <tr>
-          <td>DA to IOD Rent Amount (Rs)</td>
-          <td style="text-align:center;">&ndash;</td>
-          <td style="text-align:right;">${daToIODHindCHS.ajmeraRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
-      <tr class="pastel-blue-row">
+<tr>
+  <td>Pre-DA Rent Amount (Rs)</td>
+ <td style="text-align:right;">${dostiPreDAHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraPreDAHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  </tr>
+<tr>
+  <td>DA to IOD Rent Amount (Rs)</td>
+ <td style="text-align:right;">${dostiDAtoIODHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraDAtoIODHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+<td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+</tr>
+<tr>
+  <td>IOD - FCC Rent Amount (Rs)</td>
+ <td style="text-align:right;">${dostiIODtoFCCHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraIODtoFCCHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  </tr>
 
-          <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
-          <td style="text-align:right;">${backDatedHindCHSDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">${backDatedHindCHSAjmera.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-           <td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-         
-        </tr>
+
+<tr class="pastel-blue-row">
+  <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
+  <td style="text-align:right;">${dostiBackdatedHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${ajmeraBackdatedHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+<td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+</tr>
+
         <tr>
           <td>12 Months rent after IOD (Rs)</td>
           <td style="text-align:right;">${dosti12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${ajmera12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
+          <td style="text-align:right;">${runwal12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+                  </tr>
         <tr>
           <td>13 - 24 Months rent after IOD (Rs)</td>
           <td style="text-align:right;">${dosti13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${ajmera13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+<td style="text-align:right;">${runwal13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         </tr>
         <tr>
           <td>25 - 36 Months rent after IOD (Rs)</td>
@@ -1623,13 +2068,15 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
           
           <td style="text-align:right;">${ajmera25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        </tr>
+          <td style="text-align:right;">${runwal25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+                  </tr>
         <tr>
           <td>37 - 42 Months rent after IOD (Rs)</td>
 <td style="text-align:right;">${dosti37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${ajmera37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${runwal37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+<td style="text-align:right;">${runwal37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
                   </tr>
       <tr class="pastel-blue-row">
 
@@ -1638,6 +2085,8 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
   
   <td style="text-align:right;">${totalAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${totalRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+    <td style="text-align:right;">${totalRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+    
 </tr>
 
 <tr>
@@ -1646,12 +2095,14 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
   
   <td style="text-align:right;">${corpusAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${corpusRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
+  <td style="text-align:right;">${corpusRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  </tr>
 
 <tr>
   <td><strong>Shifting charges (Rs)</strong></td>
   <td style="text-align:right;">${shiftingDostiHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${shiftingRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 </tr>
 
@@ -1661,13 +2112,21 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
   
   <td style="text-align:right;">${brokerageAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${brokerageRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-</tr>
+  <td style="text-align:right;">${brokerageRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  </tr>
 
-      <tr class="pastel-green-row">
+<tr>
+  <td><strong>Member collector dues (Rs)</strong></td>
+  <td style="text-align:right;">${memberCollectorDues.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${memberCollectorDues.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">0</td>
+  <td style="text-align:right;">0</td>
+</tr>
+<tr class="pastel-green-row">
   <td><strong>Total Cash Compensation (Rs)</strong></td>
   <td style="text-align:right;">${totalCashDostiHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  
   <td style="text-align:right;">${totalCashAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+  <td style="text-align:right;">${totalCashRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${totalCashRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 </tr>
 
@@ -1677,7 +2136,7 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
   
   <td style="text-align:right;">${((proposedAreaHindCHS.Ajmera - hindCHSTotalMOFA) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${((proposedAreaHindCHS.Runwal - hindCHSTotalMOFA) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-  
+    <td style="text-align:right;">${((proposedAreaHindCHS.RunwalB - hindCHSTotalMOFA) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 </tr>
 
      
@@ -1695,12 +2154,14 @@ document.getElementById('launchRateInfoInline').innerText = `₹${launchPrice.to
 const hindCHSProposedDosti = proposedAreaHindCHS.Dosti;
 const hindCHSProposedAjmera = proposedAreaHindCHS.Ajmera;
 const hindCHSProposedRunwal = proposedAreaHindCHS.Runwal;
+const hindCHSProposedRunwalB = proposedAreaHindCHS.RunwalB;
 
 //const hindCHSTotalMOFA = wingAreas.A.totalMOFA + wingAreas.B.totalMOFA + wingAreas.C.totalMOFA + wingAreas.D.totalMOFA + wingAreas.E.totalMOFA;
 
 const hindCHSAdditionalDosti = hindCHSProposedDosti - hindCHSTotalMOFA;
 const hindCHSAdditionalAjmera = hindCHSProposedAjmera - hindCHSTotalMOFA;
 const hindCHSAdditionalRunwal = hindCHSProposedRunwal - hindCHSTotalMOFA;
+const hindCHSAdditionalRunwalB = hindCHSProposedRunwalB - hindCHSTotalMOFA;
 
 const hindCHSGST5AdditionalDosti = (launchPrice * hindCHSAdditionalDosti) * 0.05;
 const hindCHSGST5AdditionalAjmera = 0;
@@ -1715,49 +2176,50 @@ const hindCHSGST18ConstructionAjmera = 0;
 const hindCHSGST18ConstructionRunwal = 0;
 
 // --- Build Hind CHS Liabilities Table HTML ---
-const hindCHSLiabilitiesTableHTML = `
-  <h3 style="text-align:center; margin-top:30px;">Hind CHS level Potential Liabilities</h3>
-  <div style="font-size:15px; margin:28px 0 8px 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
-    <strong>Note:</strong> GST for Hind CHS is calculated using the per square foot price at <strong>Launch rate</strong> 
-    (<span id="hindCHSLaunchRateInfoInline">₹35,000/sq.ft</span>), and construction cost is assumed to be <strong>₹6,000/sq.ft</strong>.
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th>Dosti</th>
-        <th>Ajmera</th>
-        <th>Runwal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>GST at 0%</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-      <tr>
-        <td>GST at 5% of additional area</td>
-        <td style="text-align:right;">${hindCHSGST5AdditionalDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-      <tr>
-        <td>GST at 5% of full new area</td>
-        <td style="text-align:right;">${hindCHSGST5FullDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-      <tr>
-        <td>GST at 5% of construction cost</td>
-        <td style="text-align:right;">${hindCHSGST18ConstructionDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        <td style="text-align:right;">0</td>
-        <td style="text-align:right;">0</td>
-      </tr>
-    </tbody>
-  </table>
-`;
+//const hindCHSLiabilitiesTableHTML = `
+//  <h3 style="text-align:center; margin-top:30px;">Hind CHS level Potential Liabilities</h3>
+//  <div style="font-size:15px; margin:28px 0 8px 0; padding:8px 12px; background:#eef6ff; border-radius:6px; border:1px solid #dde6ef;">
+  //  <strong>Note:</strong> GST for Hind CHS is calculated using the per square foot price at <strong>Launch rate</strong> 
+   // (<span id="hindCHSLaunchRateInfoInline">₹35,000/sq.ft</span>), and construction cost is assumed to be <strong>₹6,000/sq.ft</strong>.
+ // </div>
+ // <table>
+  //  <thead>
+   //   <tr>
+    //    <th></th>
+     //   <th>Dosti</th>
+      //  <th>Ajmera</th>
+      //  <th>Runwal</th>
+      //  <th>Runwal-B</th>
+   //   </tr>
+   // </thead>
+   // <tbody>
+   //   <tr>
+    //    <td>GST at 0%</td>
+     //   <td style="text-align:right;">0</td>
+      //  <td style="text-align:right;">0</td>
+       // <td style="text-align:right;">0</td>
+     // </tr>
+     // <tr>
+     //   <td>GST at 5% of additional area</td>
+      //  <td style="text-align:right;">${hindCHSGST5AdditionalDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+      //  <td style="text-align:right;">0</td>
+      //  <td style="text-align:right;">0</td>
+      //</tr>
+      //<tr>
+      //  <td>GST at 5% of full new area</td>
+      //  <td style="text-align:right;">${hindCHSGST5FullDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+      //  <td style="text-align:right;">0</td>
+      //  <td style="text-align:right;">0</td>
+      //</tr>
+      //<tr>
+      //  <td>GST at 5% of construction cost</td>
+      //  <td style="text-align:right;">${hindCHSGST18ConstructionDosti.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+      //  <td style="text-align:right;">0</td>
+      //  <td style="text-align:right;">0</td>
+      //</tr>
+   // </tbody>
+ // </table>
+//`;
 
 // --- Insert after Hind CHS eligibility table ---
 hindCHSEligibilityTableContainer.innerHTML += hindCHSLiabilitiesTableHTML;
