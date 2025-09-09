@@ -640,7 +640,7 @@ function monthsBetweenIODandFCC(iodDateStr, fccDateStr) {
   }
 
   // Pre-DA months per wing and offer mappings
-  const preDAMonthsRunwalPerWing = { A: 0, B: 0, C: 6, D: 12, E: 12 };
+  const preDAMonthsRunwalPerWing = { A: 0, B: 0, C: 6, D: 9, E: 9 };
   const preDAMonthsAjmeraPerWing = { A: 0, B: 0, C: 3, D: 9, E: 9 };
   const preDAMonthsDostiPerWing = { A: 12, B: 12, C: 12, D: 12, E: 12 };
 
@@ -766,7 +766,7 @@ function showAllBasicInputsTable() {
       runwalMonths = 6;
       ajmeraMonths = 3;
     } else if (selectedWing === 'D' || selectedWing === 'E') {
-      runwalMonths = 12;
+      runwalMonths = 9;
       ajmeraMonths = 9;
     }
 
@@ -1696,13 +1696,14 @@ const totalCashRunwalHindCHS = totalRunwalHindCHS + corpusRunwalHindCHS + shifti
 const totalCashAjmeraHindCHS = totalAjmeraHindCHS + corpusAjmeraHindCHS + shiftingAjmeraHindCHS + brokerageAjmeraHindCHS + memberCollectorDues;
 const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingDostiHindCHS + brokerageDostiHindCHS + memberCollectorDues;
 
-    // --- USER: Runwal-B Pre-DA Adjustment ---
-    // Calculate Runwal-B pre-DA rent for user, with 3 months less for D/E wings
-    let runwalBPreDARent = runwalRent;
-    if (selectedWing === 'D' || selectedWing === 'E') {
-      runwalBPreDARent = runwalRent - (RATE_RUNWAL * userFlatCarpetAreaSqFt * 3);
-      if (runwalBPreDARent < 0) runwalBPreDARent = 0;
-    }
+// --- USER: Runwal-B Pre-DA Adjustment ---
+// For RunwalB, D/E wings pre-DA rent should be for 12 months, not 9
+let runwalBPreDARent = RATE_RUNWAL * userFlatCarpetAreaSqFt * 12;
+if (selectedWing === 'C') {
+  runwalBPreDARent = RATE_RUNWAL * userFlatCarpetAreaSqFt * 6;
+} else if (selectedWing === 'A' || selectedWing === 'B') {
+  runwalBPreDARent = 0;
+}
     // For the rest of the periods, use the same values as Runwal (or add separate logic if needed)
     // Runwal-B DA to IOD and IOD to FCC are same as Runwal
     let runwalBBackdatedRent;
@@ -1725,19 +1726,21 @@ const totalCashDostiHindCHS = totalDostiHindCHS + corpusDostiHindCHS + shiftingD
     const totalCashRunwalBUser =
       totalRunwalBUser + corpusRunwalUser + shiftingRunwalUser + brokerageRunwalUser;
 
-    // --- HIND CHS: Runwal-B Pre-DA Adjustment ---
-    // Loop and adjust pre-DA for D/E wings in Runwal-B
-    let runwalBPreDAHindCHS = 0;
-    for (const wing in wingAreas) {
-      const flatArea = wingAreas[wing].flatMOFA;
-      const preDAMonths = preDAMonthsRunwalPerWing[wing] || 0;
-      let thisPreDA = RATE_RUNWAL * flatArea * preDAMonths;
-      if (wing === 'D' || wing === 'E') {
-        thisPreDA -= RATE_RUNWAL * flatArea * 3;
-        if (thisPreDA < 0) thisPreDA = 0;
-      }
-      runwalBPreDAHindCHS += thisPreDA;
-    }
+// --- HIND CHS: Runwal-B Pre-DA Adjustment ---
+// D/E wings get 12 months, C gets 6, A/B get 0
+let runwalBPreDAHindCHS = 0;
+for (const wing in wingAreas) {
+  const flatArea = wingAreas[wing].flatMOFA;
+  let preDAMonths = 0;
+  if (wing === 'D' || wing === 'E') {
+    preDAMonths = 12;
+  } else if (wing === 'C') {
+    preDAMonths = 6;
+  }
+  // A/B remain 0
+  let thisPreDA = RATE_RUNWAL * flatArea * preDAMonths;
+  runwalBPreDAHindCHS += thisPreDA;
+}
     // DA-IOD and IOD-FCC same as normal Runwal
     let daToIODHindCHS_runwal = daToIODHindCHS.runwalRent;
     let iodToFCCHindCHS_runwal = iodToFCCHindCHS.runwalRent;
