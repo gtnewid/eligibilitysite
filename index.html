@@ -1786,51 +1786,57 @@ for (const wing in wingAreas) {
         <thead>
           <tr>
             <th></th>
-            <th>Ajmera</th>
+
             <th>Runwal</th>
             <th>Runwal-B</th>
             <th>Dosti</th>
-
+            <th>Ajmera</th>
           </tr>
         </thead>
         <tbody>
         <tr class="pastel-green-row">
           <td><strong>Proposed Area (sq.ft.)</strong></td>
-          <td style="text-align:right;">${(totalMOFAUserSqFt * 1.57).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
+
           <td style="text-align:right;">${(totalMOFAUserSqFt * 1.585).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
           <td style="text-align:right;">${(totalMOFAUserSqFt * 1.625).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
         </tr>
         <tr>
           <td>Pre-DA Rent Amount (Rs)</td>
 
-          <td style="text-align:right;">${ajmeraPreDARent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+
           <td style="text-align:right;">${runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwalBPreDARent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-          <td style="text-align:right;">Voted Out</td>        </tr>
+          <td style="text-align:right;">Voted Out</td>       
+          <td style="text-align:right;">Voted Out</td>       
+           </tr>
         <tr>
           <td>DA to IOD Rent Amount (Rs)</td>
 
-          <td style="text-align:right;">${ajmeraDAtoIODRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+    
           <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${daToIODUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
                   </tr>
         <tr>
           <td>IOD - FCC Rent Amount (Rs)</td>
           
-          <td style="text-align:right;">${ajmeraIODtoFCCRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+
           <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${iodToFCCUser.runwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-<td style="text-align:right;">Voted Out</td>
+		<td style="text-align:right;">Voted Out</td>
+		<td style="text-align:right;">Voted Out</td>
         </tr>
+        
         <tr class="pastel-blue-row">
           <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
 
-          <td style="text-align:right;">${ajmeraBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwalBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwalBBackdatedRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
                   </tr>
 
 
@@ -1838,12 +1844,7 @@ for (const wing in wingAreas) {
   <td>12 Months Rent After IOD (Rs)</td>
           
 
-  <td style="text-align:right;">
-    ${ajmera12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
-    <span style="font-size:0.95em;color:#666;">
-      (${(ajmera12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
-    </span>
-  </td>
+
   <td style="text-align:right;">
     ${runwal12MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
     <span style="font-size:0.95em;color:#666;">
@@ -1856,6 +1857,7 @@ for (const wing in wingAreas) {
       (${(runwal12MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
     </span>
       <td style="text-align:right;">Voted Out</td>
+            <td style="text-align:right;">Voted Out</td>
   </td>
 
 </tr>        
@@ -1864,12 +1866,6 @@ for (const wing in wingAreas) {
 <tr>
   <td>13 - 24 Months Rent After IOD (Rs)</td>
 
-  <td style="text-align:right;">
-    ${ajmera13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
-    <span style="font-size:0.95em;color:#666;">
-      (${(ajmera13_24MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
-    </span>
-  </td>
   <td style="text-align:right;">
     ${runwal13_24MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
     <span style="font-size:0.95em;color:#666;">
@@ -1883,17 +1879,12 @@ for (const wing in wingAreas) {
     </span>
   </td>
              <td style="text-align:right;">Voted Out</td>
+            <td style="text-align:right;">Voted Out</td>
 
 </tr>
 <tr>
   <td>25 - 36 Months Rent After IOD (Rs)</td>
 
-  <td style="text-align:right;">
-    ${ajmera25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
-    <span style="font-size:0.95em;color:#666;">
-      (${(ajmera25_36MonthRentUser/12).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
-    </span>
-  </td>
   <td style="text-align:right;">
     ${runwal25_36MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
     <span style="font-size:0.95em;color:#666;">
@@ -1907,16 +1898,11 @@ for (const wing in wingAreas) {
     </span>
   </td>
             <td style="text-align:right;">Voted Out</td>
+		<td style="text-align:right;">Voted Out</td>
 </tr>
 <tr>
   <td>37 - 42 Months Rent After IOD (Rs)</td>
 
-  </td>
-  <td style="text-align:right;">
-    ${ajmera37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
-    <span style="font-size:0.95em;color:#666;">
-      (${(ajmera37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
-    </span>
   </td>
   <td style="text-align:right;">
     ${runwal37_42MonthRentUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}<br>
@@ -1930,70 +1916,77 @@ for (const wing in wingAreas) {
       (${(runwal37_42MonthRentUser/6).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}/m)
     </span>
            <td style="text-align:right;">Voted Out</td>
+                      <td style="text-align:right;">Voted Out</td>
+
   </td>
 </tr>
 
         <tr class="pastel-blue-row">
           <td><strong>Total Rent (Rs)</strong></td>
-          <td style="text-align:right;">${totalAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalRunwalBUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
         </tr>
 
 <tr>
   <td><strong>Corpus (Rs)</strong></td>
   
-  <td style="text-align:right;">${corpusAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${corpusRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 <td style="text-align:right;">${corpusRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
 </tr>
 
 <tr>
   <td><strong>Shifting charges (Rs)</strong></td>
 
-  <td style="text-align:right;">${shiftingAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                  <td style="text-align:right;">Voted Out</td>
+  
     </tr>
 
 <tr>
   <td><strong>Brokerage (Rs)</strong></td>
-  <td style="text-align:right;">${brokerageAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   
   <td style="text-align:right;">${brokerageRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 <td style="text-align:right;">${brokerageRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                   <td style="text-align:right;">Voted Out</td>
+ 
   </tr>
 
 
       <tr class="pastel-green-row">
           <td><strong>Total Cash Compensation (Rs)</strong></td>
-          <td style="text-align:right;">${totalCashAjmeraUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalCashRunwalUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalCashRunwalBUser.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+              <td style="text-align:right;">Voted Out</td>
+      
         </tr>
 
       <tr class="pastel-blue-row">
 
   <td><strong>Value of additional area on completion (Rs)</strong></td>
-  <td style="text-align:right;">${((totalMOFAUserSqFt * 1.57 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-
    <td style="text-align:right;">${((totalMOFAUserSqFt * 1.585 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
    <td style="text-align:right;">${((totalMOFAUserSqFt * 1.625 - totalMOFAUserSqFt) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
 </tr>
 
       <tr class="pastel-green-row">
         <td><strong>New flat value on completion (Rs)</strong></td>
-        <td style="text-align:right;">${((totalMOFAUserSqFt * 1.57) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
-        
         <td style="text-align:right;">${((totalMOFAUserSqFt * 1.585) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
         <td style="text-align:right;">${((totalMOFAUserSqFt * 1.625) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
            </tr>
 
       </tbody>
@@ -2091,137 +2084,152 @@ const gst18ConstructionRunwal = 0;
         <thead>
           <tr>
             <th></th>
-            <th>Ajmera</th>
             <th>Runwal</th>
             <th>Runwal-B</th>
             <th>Dosti</th>
+                        <th>Ajmera</th>
+
           </tr>
         </thead>
         <tbody>
         <tr class="pastel-green-row">
           <td><strong>Proposed Area (sq.ft.)</strong></td>
-          <td style="text-align:right;">${proposedAreaHindCHS.Ajmera.toFixed(2)}</td>
           <td style="text-align:right;">${proposedAreaHindCHS.Runwal.toFixed(2)}</td>
           <td style="text-align:right;">${proposedAreaHindCHS.RunwalB.toFixed(2)}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
         </tr>
         <tr>
           <td>Pre-DA Rent Amount (Rs)</td>
-          <td style="text-align:right;">${ajmeraPreDAHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+
           <td style="text-align:right;">${hindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwalBPreDAHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
         </tr>
         <tr>
           <td>DA to IOD Rent Amount (Rs)</td>
-          <td style="text-align:right;">${ajmeraDAtoIODHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${daToIODHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
         </tr>
         <tr>
           <td>IOD - FCC Rent Amount (Rs)</td>
-          <td style="text-align:right;">${ajmeraIODtoFCCHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${iodToFCCHindCHS.runwalRent.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+          <td style="text-align:right;">Voted Out</td>
+
         </tr>
         <tr class="pastel-blue-row">
           <td><strong>Cumulative Back Dated Rent Amount (Rs)</strong></td>
-          <td style="text-align:right;">${ajmeraBackdatedHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${backDatedHindCHSRunwal.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${backDatedHindCHSRunwalB.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
         </tr>
 
         <tr>
           <td>12 Months rent after IOD (Rs)</td>
           
-          <td style="text-align:right;">${ajmera12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal12MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
                   </tr>
         <tr>
           <td>13 - 24 Months rent after IOD (Rs)</td>
           
-          <td style="text-align:right;">${ajmera13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 <td style="text-align:right;">${runwal13_24MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
         </tr>
         <tr>
           <td>25 - 36 Months rent after IOD (Rs)</td>
           
-          <td style="text-align:right;">${ajmera25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${runwal25_36MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
                   </tr>
         <tr>
           <td>37 - 42 Months rent after IOD (Rs)</td>
-          <td style="text-align:right;">${ajmera37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           
           <td style="text-align:right;">${runwal37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
 <td style="text-align:right;">${runwal37_42MonthRentHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+          <td style="text-align:right;">Voted Out</td>
+
                   </tr>
   <tr class="pastel-blue-row">
           <td><strong>Total Rent (Rs)</strong></td>
-          <td style="text-align:right;">${totalAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalRunwalBHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
         </tr>
 
 <tr>
   <td><strong>Corpus (Rs)</strong></td>
   
-  <td style="text-align:right;">${corpusAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${corpusRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${corpusRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
   </tr>
 
 <tr>
   <td><strong>Shifting charges (Rs)</strong></td>
-  <td style="text-align:right;">${shiftingAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${shiftingRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
 </tr>
 
 <tr>
   <td><strong>Brokerage (Rs)</strong></td>
   
-  <td style="text-align:right;">${brokerageAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${brokerageRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${brokerageRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
   </tr>
 
 <tr>
   <td><strong>Member collector dues (Rs)</strong></td>
-  <td style="text-align:right;">${memberCollectorDues.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">0</td>
   <td style="text-align:right;">0</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
 </tr>
         <tr class="pastel-green-row">
           <td><strong>Total Cash Compensation (Rs)</strong></td>
-          <td style="text-align:right;">${totalCashAjmeraHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
+
           <td style="text-align:right;">${totalCashRunwalHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">${totalCashRunwalBHindCHS.toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
         </tr>
 
       <tr class="pastel-blue-row">
   <td><strong>Value of additional area on completion (Rs)</strong></td>
   
-  <td style="text-align:right;">${((proposedAreaHindCHS.Ajmera - hindCHSTotalMOFA) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
   <td style="text-align:right;">${((proposedAreaHindCHS.Runwal - hindCHSTotalMOFA) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
     <td style="text-align:right;">${((proposedAreaHindCHS.RunwalB - hindCHSTotalMOFA) * completionPrice).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:0})}</td>
           <td style="text-align:right;">Voted Out</td>
+                    <td style="text-align:right;">Voted Out</td>
+
 </tr>
 
      
